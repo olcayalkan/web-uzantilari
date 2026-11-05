@@ -73,8 +73,8 @@ yazdırılabilirlik + harf/sesli oranı + rakam-sembol cezası + yaygın harf-ik
 
 1. Chrome'da `chrome://extensions` aç.
 2. Sağ üstten **Geliştirici modu**'nu aç.
-3. **Paketlenmemiş öğe yükle** → bu klasörü (`uzantilar/oto-cozucu/`) ya da
-   [Releases](../../../../releases/latest)'tan indirip çıkardığın `oto-cozucu` klasörünü seç.
+3. **Paketlenmemiş öğe yükle** → bu klasörü (`oto-cozucu/`) ya da
+   [Releases](https://github.com/olcayalkan/web-uzantilari/releases/latest)'tan indirip çıkardığın `oto-cozucu` klasörünü seç.
 
 ## Paketleme
 

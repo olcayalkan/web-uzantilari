@@ -5,10 +5,10 @@ anahtarı gerektirmezler; üçü hiç ağa çıkmaz.
 
 | Uzantı | Ne yapar | Çalıştığı yer | Ağ | İndir |
 |---|---|---|---|---|
-| **[Oto Çözücü](uzantilar/oto-cozucu/)** | Kodlanmış ya da şifreli metni tanıyıp çözer, istersen kodlar: Base64, Hex, Morse, Vigenère, JWT, hash tanıma ve 30+ yöntem. | Tüm siteler | Yok | [oto-cozucu.zip](https://github.com/olcayalkan/web-uzantilari/releases/latest/download/oto-cozucu.zip) |
-| **[Oto Çevirmen](uzantilar/oto-cevirmen/)** | Sayfada seçtiğin metni Türkçeye çevirip seçimin altında küçük bir balonda gösterir. | Tüm siteler | Google Translate | [oto-cevirmen.zip](https://github.com/olcayalkan/web-uzantilari/releases/latest/download/oto-cevirmen.zip) |
-| **[Sola İtele](uzantilar/sola-itele/)** | Sayfanın içeriğini ekranın soluna iter, genişliği ayarlanabilir orana (varsayılan %70) sınırlar. | Tüm siteler | Yok | [sola-itele.zip](https://github.com/olcayalkan/web-uzantilari/releases/latest/download/sola-itele.zip) |
-| **[Voice Tamer](uzantilar/voice-tamer/)** | YouTube seslerinde tiz, sibilans, gırtlak tınısı ve ani ses patlamalarını yumuşatır. | Yalnızca YouTube | Yok | [voice-tamer.zip](https://github.com/olcayalkan/web-uzantilari/releases/latest/download/voice-tamer.zip) |
+| **[Oto Çözücü](oto-cozucu/)** | Kodlanmış ya da şifreli metni tanıyıp çözer, istersen kodlar: Base64, Hex, Morse, Vigenère, JWT, hash tanıma ve 30+ yöntem. | Tüm siteler | Yok | [oto-cozucu.zip](https://github.com/olcayalkan/web-uzantilari/releases/latest/download/oto-cozucu.zip) |
+| **[Oto Çevirmen](oto-cevirmen/)** | Sayfada seçtiğin metni Türkçeye çevirip seçimin altında küçük bir balonda gösterir. | Tüm siteler | Google Translate | [oto-cevirmen.zip](https://github.com/olcayalkan/web-uzantilari/releases/latest/download/oto-cevirmen.zip) |
+| **[Sola İtele](sola-itele/)** | Sayfanın içeriğini ekranın soluna iter, genişliği ayarlanabilir orana (varsayılan %70) sınırlar. | Tüm siteler | Yok | [sola-itele.zip](https://github.com/olcayalkan/web-uzantilari/releases/latest/download/sola-itele.zip) |
+| **[Voice Tamer](voice-tamer/)** | YouTube seslerinde tiz, sibilans, gırtlak tınısı ve ani ses patlamalarını yumuşatır. | Yalnızca YouTube | Yok | [voice-tamer.zip](https://github.com/olcayalkan/web-uzantilari/releases/latest/download/voice-tamer.zip) |
 
 ## Kurulum
 
@@ -38,7 +38,10 @@ Kod açık; her uzantının klasöründe ne yaptığı ve neden o izni istediği
 ## Geliştirici
 
 ```
-uzantilar/<ad>/          Her biri kendi başına yüklenebilir bir uzantı
+oto-cozucu/              Her uzantı kökte kendi klasöründe,
+oto-cevirmen/            kendi başına yüklenebilir
+sola-itele/
+voice-tamer/
   manifest.json
   icons/
   src/

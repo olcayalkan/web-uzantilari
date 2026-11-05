@@ -24,7 +24,8 @@ Kodu değiştirdikten sonra uzantılar sayfasında kartın ↻ düğmesine bas, 
 
 ## Yeni uzantı eklemek
 
-1. `uzantilar/<kisa-ad>/` klasörünü aç; klasör adı zip'in adı olur.
+1. Depo kökünde `<kisa-ad>/` klasörünü aç; klasör adı zip'in adı olur. İçinde
+   `manifest.json` olan her kök klasör uzantı sayılır, betikler onu kendiliğinden bulur.
 2. [mimari.md](mimari.md)'deki düzeni kur: `manifest.json`, `icons/`,
    `src/{core,features/<özellik>/{domain,data,presentation},background}`.
 3. `tests/test.js` ekle: domain fonksiyonlarını Node'da test etsin, başarısızlıkta

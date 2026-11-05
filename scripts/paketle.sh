@@ -9,7 +9,8 @@ DIST="$KOK/dist"
 rm -rf "$DIST"
 mkdir -p "$DIST"
 
-for klasor in "$KOK"/uzantilar/*/; do
+for klasor in "$KOK"/*/; do
+  [ -f "$klasor/manifest.json" ] || continue  # scripts/, docs/ uzantı değil
   ad="$(basename "$klasor")"
   surum="$(sed -n 's/.*"version": *"\([^"]*\)".*/\1/p' "$klasor/manifest.json" | head -1)"
   icerik=(manifest.json src)

@@ -5,11 +5,14 @@ import { readFileSync, existsSync, readdirSync } from "node:fs";
 import { join, dirname, normalize } from "node:path";
 import { fileURLToPath } from "node:url";
 
-const KOK = join(dirname(fileURLToPath(import.meta.url)), "..", "uzantilar");
+const KOK = join(dirname(fileURLToPath(import.meta.url)), "..");
 let hata = 0;
 const yaz = (ad, m) => { console.log(`  ✗ ${ad}: ${m}`); hata = 1; };
 
-for (const ad of readdirSync(KOK)) {
+// İçinde manifest.json olan her kök klasör bir uzantıdır.
+const uzantilar = readdirSync(KOK).filter((ad) => existsSync(join(KOK, ad, "manifest.json")));
+if (!uzantilar.length) { console.log("  ✗ hiç uzantı bulunamadı"); process.exit(1); }
+for (const ad of uzantilar) {
   const kok = join(KOK, ad);
   const m = JSON.parse(readFileSync(join(kok, "manifest.json"), "utf8"));
   const yollar = [

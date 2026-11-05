@@ -24,8 +24,8 @@ URL ya da e-posta adresi. Input/textarea içindeki seçimler de çevrilir.
 
 1. Chrome'da `chrome://extensions` aç.
 2. Sağ üstten **Geliştirici modu**'nu aç.
-3. **Paketlenmemiş öğe yükle** → bu klasörü (`uzantilar/oto-cevirmen/`) ya da
-   [Releases](../../../../releases/latest)'tan indirip çıkardığın `oto-cevirmen` klasörünü seç.
+3. **Paketlenmemiş öğe yükle** → bu klasörü (`oto-cevirmen/`) ya da
+   [Releases](https://github.com/olcayalkan/web-uzantilari/releases/latest)'tan indirip çıkardığın `oto-cevirmen` klasörünü seç.
 
 Uzantı yüklenmeden önce açık olan sekmeleri bir kez yenile; content script yalnızca
 yeni yüklenen sayfalara girer.
@@ -80,5 +80,5 @@ karakterlik parçalara bölünüp sırayla çevrilir. Son 200 çeviri bellekte t
 node tests/test.js        # motor testleri (çevrimdışı)
 node tests/test.js --ag   # + gerçek uç nokta denemesi
 tests/calistir.sh         # content.js, görünmez Chrome'da
-../../scripts/paketle.sh  # depo kökünde dist/oto-cevirmen.zip
+../scripts/paketle.sh     # depo kökünde dist/oto-cevirmen.zip
 ```

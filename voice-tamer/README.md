@@ -7,8 +7,8 @@ Rahatsız edici konuşmacı sesini, tonu boğmadan yumuşatır.
 ## Kurulum (Brave / Chrome / Edge)
 
 1. `brave://extensions` → sağ üstten **Geliştirici modu**
-2. **Paketlenmemiş öğe yükle** → bu klasör (`uzantilar/voice-tamer/`) ya da
-   [Releases](../../../../releases/latest)'tan indirip çıkardığın `voice-tamer` klasörü
+2. **Paketlenmemiş öğe yükle** → bu klasör (`voice-tamer/`) ya da
+   [Releases](https://github.com/olcayalkan/web-uzantilari/releases/latest)'tan indirip çıkardığın `voice-tamer` klasörü
 
 - Araç çubuğu ikonu veya **Alt+Shift+V** → paneli aç/kapat
 - Başlıktaki yeşil anahtar → işlemeyi baypas et (A/B karşılaştırma)

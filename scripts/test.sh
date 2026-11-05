@@ -23,7 +23,8 @@ kos() { # kos <etiket> <komut...>
 echo "manifest"
 kos "yollar" node "$KOK/scripts/manifest-denetle.mjs"
 
-for klasor in "$KOK"/uzantilar/*/; do
+for klasor in "$KOK"/*/; do
+  [ -f "$klasor/manifest.json" ] || continue  # scripts/, docs/ uzantı değil
   ad="$(basename "$klasor")"
   echo "$ad"
   cd "$klasor"

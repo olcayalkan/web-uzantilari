@@ -26,7 +26,7 @@ sola-itele/
 ## Hızlı başlangıç
 
 1. `chrome://extensions` sayfasını açın, **Geliştirici modu**nu açın.
-2. **Paketlenmemiş öğe yükle** ile bu klasörü ya da [Releases](../../../../releases/latest)'tan indirip çıkardığınız `sola-itele` klasörünü seçin.
+2. **Paketlenmemiş öğe yükle** ile bu klasörü ya da [Releases](https://github.com/olcayalkan/web-uzantilari/releases/latest)'tan indirip çıkardığınız `sola-itele` klasörünü seçin.
 3. Araç çubuğundaki simgeye tıklayın, anahtarı açın ve oranı seçin.
 
 Ayrıntılar için [docs/](docs/) klasörüne bakın.
