@@ -1,12 +1,15 @@
 # Kurulum
 
+Her uzantının adım adım kurulum videosu: [docs/videolar/](videolar/) ve uzantının kendi README'si.
+
 ## İlk yükleme
 
 1. [Releases](https://github.com/olcayalkan/web-uzantilari/releases/latest) sayfasından
    uzantının zip'ini indir.
 2. Zip'i kalıcı bir klasöre çıkar (ör. `Belgeler/Uzantilar/sola-itele`).
    Tarayıcı uzantıyı her açılışta bu klasörden okur; klasörü silersen uzantı da çalışmaz.
-3. Uzantılar sayfasını aç:
+3. Uzantılar sayfasını aç: sağ üstteki **⋮** menüsü → **Uzantılar** → **Uzantıları yönet**.
+   Adres çubuğuna yazmak da olur:
 
    | Tarayıcı | Adres |
    |---|---|

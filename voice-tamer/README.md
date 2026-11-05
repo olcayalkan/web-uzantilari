@@ -1,5 +1,7 @@
 # Voice Tamer
 
+<a href="../docs/videolar/voice-tamer.mp4"><img src="../docs/videolar/voice-tamer.gif" width="960" alt="Voice Tamer: Chrome menüsünden kurulum ve ilk kullanım"></a>
+
 YouTube seslerinde tiz/sibilans ("s", "ş" patlamaları) ve 2–4 kHz sertlik bastırıcı.
 Rahatsız edici konuşmacı sesini, tonu boğmadan yumuşatır.
 **Tamamen yerel:** ağ çağrısı, harici bağımlılık, telemetri yok.

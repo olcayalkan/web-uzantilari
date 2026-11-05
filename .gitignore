@@ -10,3 +10,6 @@ node_modules/
 *.key
 .env
 .env.*
+
+# Tanıtım videosunun ara çıktıları (brag-slim); son hâli docs/ altında.
+brag-output/

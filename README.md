@@ -3,6 +3,7 @@
 Chrome, Brave ve Edge için dört küçük tarayıcı uzantısı. Hesap, kayıt ya da API
 anahtarı gerektirmezler; üçü hiç ağa çıkmaz.
 
+
 | Uzantı | Ne yapar | Çalıştığı yer | Ağ | İndir |
 |---|---|---|---|---|
 | **[Oto Çözücü](oto-cozucu/)** | Kodlanmış ya da şifreli metni tanıyıp çözer, istersen kodlar: Base64, Hex, Morse, Vigenère, JWT, hash tanıma ve 30+ yöntem. | Tüm siteler | Yok | [oto-cozucu.zip](https://github.com/olcayalkan/web-uzantilari/releases/latest/download/oto-cozucu.zip) |
@@ -13,14 +14,41 @@ anahtarı gerektirmezler; üçü hiç ağa çıkmaz.
 ## Kurulum
 
 1. Yukarıdan istediğin uzantının zip'ini indir ve bir klasöre çıkar.
-2. Tarayıcıda uzantılar sayfasını aç: `chrome://extensions`, `brave://extensions`
-   ya da `edge://extensions`.
+2. Uzantılar sayfasını aç: sağ üstteki **⋮** menüsü → **Uzantılar** → **Uzantıları yönet**
+   (ya da adres çubuğuna `chrome://extensions`, `brave://extensions`, `edge://extensions`).
 3. Sağ üstten **Geliştirici modu**'nu aç.
 4. **Paketlenmemiş öğe yükle** düğmesine bas ve çıkardığın klasörü seç
    (içinde `manifest.json` olan klasör).
 5. Uzantı yüklenmeden önce açık olan sekmeleri bir kez yenile.
 
 Güncelleme, kaldırma ve sık sorunlar için: [docs/kurulum.md](docs/kurulum.md).
+
+## Kurulum videoları
+
+Her uzantı için Chrome menüsünden adım adım kurulum ve ilk kullanım. Önizlemeye tıklayınca tam çözünürlüklü video açılır (23 sn).
+
+<table>
+  <tr>
+    <td align="center" width="50%">
+      <a href="docs/videolar/oto-cozucu.mp4"><img src="docs/videolar/oto-cozucu-onizleme.gif" width="100%" alt="Oto Çözücü: Chrome menüsünden kurulum ve ilk kullanım"></a>
+      <br><b>Oto Çözücü</b> · <a href="docs/videolar/oto-cozucu.mp4">videoyu izle</a>
+    </td>
+    <td align="center" width="50%">
+      <a href="docs/videolar/oto-cevirmen.mp4"><img src="docs/videolar/oto-cevirmen-onizleme.gif" width="100%" alt="Oto Çevirmen: Chrome menüsünden kurulum ve ilk kullanım"></a>
+      <br><b>Oto Çevirmen</b> · <a href="docs/videolar/oto-cevirmen.mp4">videoyu izle</a>
+    </td>
+  </tr>
+  <tr>
+    <td align="center" width="50%">
+      <a href="docs/videolar/sola-itele.mp4"><img src="docs/videolar/sola-itele-onizleme.gif" width="100%" alt="Sola İtele: Chrome menüsünden kurulum ve ilk kullanım"></a>
+      <br><b>Sola İtele</b> · <a href="docs/videolar/sola-itele.mp4">videoyu izle</a>
+    </td>
+    <td align="center" width="50%">
+      <a href="docs/videolar/voice-tamer.mp4"><img src="docs/videolar/voice-tamer-onizleme.gif" width="100%" alt="Voice Tamer: Chrome menüsünden kurulum ve ilk kullanım"></a>
+      <br><b>Voice Tamer</b> · <a href="docs/videolar/voice-tamer.mp4">videoyu izle</a>
+    </td>
+  </tr>
+</table>
 
 > Uzantılar Chrome Web Mağazası'nda değil; bu yüzden geliştirici modu gerekiyor.
 

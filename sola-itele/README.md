@@ -1,5 +1,7 @@
 # Sola İtele
 
+<a href="../docs/videolar/sola-itele.mp4"><img src="../docs/videolar/sola-itele.gif" width="960" alt="Sola İtele: Chrome menüsünden kurulum ve ilk kullanım"></a>
+
 Web sayfalarının tüm içeriğini ekranın soluna iten Chrome eklentisi. Sayfa, pencere genişliğinin ayarlanan oranı kadar yer kaplar (varsayılan %70) ve sağ taraf boş kalır. İçerik silinmez, küçültülmez.
 
 ## Dosya yapısı
