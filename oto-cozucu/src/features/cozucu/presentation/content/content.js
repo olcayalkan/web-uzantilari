@@ -1,6 +1,6 @@
 // Sayfa-içi seçim çözücü: kullanıcı metin seçince en olası çözümü küçük bir
-// balonda gösterir. Popup/sağ-tık gerekmez. İzole dünyada çalışır; sayfaya
-// yalnızca tek bir balon elementi ekler, global sızdırmaz.
+// balonda gösterir. Popup/sağ-tık gerekmez. İzole dünyada çalışır, sayfaya
+// yalnızca tek bir balon elementi ekler ve global değişken bırakmaz.
 
 (function () {
   "use strict";

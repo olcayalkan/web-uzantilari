@@ -1,6 +1,6 @@
 // Sayfa-içi çevirmen: kullanıcı metin seçince çeviriyi seçimin altında bir
-// balonda gösterir. Balon kapalı Shadow DOM içinde; sayfa CSS'i ona, onun
-// CSS'i sayfaya sızmaz. Ağ isteği burada yapılmaz, service worker'a gider.
+// balonda gösterir. Balon kapalı Shadow DOM içinde olduğu için sayfa CSS'i ona,
+// onun CSS'i de sayfaya sızmaz. Ağ isteğini service worker yapar.
 
 (function () {
   "use strict";
@@ -14,7 +14,7 @@
   Depolama.otomatikYukle((v) => { otomatik = v; });
   Depolama.otomatikIzle((v) => { otomatik = v; if (!v) kapat(); });
 
-  let konak = null;   // shadow host — sayfadaki tek elementimiz
+  let konak = null;   // shadow host, sayfadaki tek elementimiz
   let kok = null;     // shadow root
   let gosterilen = ""; // açık balondaki kaynak metin; aynı seçimi tekrar çevirmemek için
   let istekNo = 0;    // yavaş gelen eski yanıt yeni balonu ezmesin
@@ -111,7 +111,7 @@
     konumla(balon, kutu);
   }
 
-  // input/textarea içindeki seçim window.getSelection()'da görünmez; ayrıca okunur.
+  // input/textarea içindeki seçim window.getSelection()'da görünmediği için ayrıca okunur.
   function secimiAl() {
     const etkin = document.activeElement;
     if (etkin && (etkin.tagName === "TEXTAREA" || (etkin.tagName === "INPUT" && /^(text|search|url|)$/i.test(etkin.type || "")))) {
@@ -122,7 +122,7 @@
     if (!sel || sel.rangeCount === 0 || sel.isCollapsed) return null;
     const metin = sel.toString();
     let kutu = sel.getRangeAt(0).getBoundingClientRect();
-    // Bazı düzenleyicilerde aralık kutusu sıfır gelir; odaktaki öğeye düş.
+    // Bazı düzenleyicilerde aralık kutusu sıfır gelir. O zaman odaktaki öğeye düş.
     if (!kutu.width && !kutu.height && etkin) kutu = etkin.getBoundingClientRect();
     return { metin, kutu };
   }
@@ -139,12 +139,12 @@
     chrome.runtime.sendMessage({ tur: S.MESAJ.cevir, metin }, (yanit) => {
       if (no !== istekNo) return;
       if (chrome.runtime.lastError || !yanit) {
-        // Uzantı güncellenince eski sayfalardaki betik yetim kalır; yenilemek gerekir.
+        // Uzantı güncellenince eski sayfalardaki betik yetim kalır, sayfayı yenilemek gerekir.
         balonCiz(kutu, "Oto Çevirmen", "Uzantıya ulaşılamadı — sayfayı yenile.", "hata");
         return;
       }
       if (!yanit.tamam) { balonCiz(kutu, "Oto Çevirmen", yanit.hata, "hata"); return; }
-      // Otomatik modda zaten Türkçe olan metin için sessiz kal; elle istendiyse söyle.
+      // Otomatik modda zaten Türkçe olan metin için sessiz kal, elle istendiyse söyle.
       if (M.gereksizMi(yanit.sonuc, metin)) {
         if (elle) balonCiz(kutu, "Türkçe", "Metin zaten Türkçe görünüyor.", "tamam");
         else kapat();
@@ -157,7 +157,7 @@
   document.addEventListener("mouseup", (e) => {
     if (!otomatik || e.button !== 0) return;
     if (konak && e.composedPath().includes(konak)) return; // balonun içinde seçim/tıklama
-    // Tıklama seçimi hemen güncellemiyor; bir tur bekle.
+    // Tıklama seçimi hemen güncellemiyor, bir tur bekle.
     setTimeout(() => {
       const s = secimiAl();
       if (!s || !s.metin.trim()) return;

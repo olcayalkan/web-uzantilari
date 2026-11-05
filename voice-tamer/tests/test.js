@@ -1,4 +1,4 @@
-// Domain test paketi — `node tests/test.js`. Tarayıcı ve ses donanımı gerektirmez.
+// Domain testleri: `node tests/test.js`. Tarayıcı ve ses donanımı gerektirmez.
 // DSP davranışı (filtre tepkileri, canlı zincir) tarayıcıda: `node tests/calistir.mjs`.
 const S = require("../src/core/sabitler.js");
 const A = require("../src/features/ses/domain/ayarlar.js");

@@ -1,18 +1,18 @@
-/* Voice Tamer - YouTube ses yumuşatıcı, giriş noktası.
+/* Voice Tamer'ın giriş noktası (YouTube ses yumuşatıcı).
  * Katmanları birbirine bağlar: depodan ayar -> domain kararları -> ses motoru -> panel.
- * Tamamen yerel: ağ çağrısı, harici bağımlılık, eval/innerHTML, sayfa scriptleriyle
- * veri alışverişi yok.
+ * Tamamen yerel çalışır. Ağ çağrısı, harici bağımlılık, eval/innerHTML ya da sayfa
+ * scriptleriyle veri alışverişi yok.
  */
 (() => {
   'use strict';
 
-  // --- Savunma katmanı 1: sadece YouTube. Manifest zaten kısıtlıyor, bu ikinci kilit.
+  // Savunma katmanı 1: yalnızca YouTube. Manifest zaten kısıtlıyor, bu ikinci kilit.
   if (!/(^|\.)youtube\.com$/i.test(location.hostname)) return;
 
   // Zaten kuruluysa sadece paneli aç/kapat
   if (window.__voiceTamer) { window.__voiceTamer.toggleUI(); return; }
 
-  // --- Savunma katmanı 2: ayar şeması (domain/ayarlar.js) bozuk ya da kötücül değeri kırpar.
+  // Savunma katmanı 2: ayar şeması (domain/ayarlar.js) bozuk ya da kötücül değeri kırpar.
   const S = Depolama.ayarlariOku();
   const D = Kararlar.olustur(S);
   const motor = SesMotoru.olustur(S, D);
@@ -33,7 +33,7 @@
     const iv = setInterval(() => { if (bagla()) clearInterval(iv); }, 700);
     setTimeout(() => clearInterval(iv), 60000);
   }
-  // AudioContext ilk kullanıcı etkileşiminde açılır - tek seferlik dinleyici
+  // AudioContext ilk kullanıcı etkileşiminde açılır, dinleyici tek seferlik
   addEventListener('click', motor.uyandir, { once: true, capture: true });
 
   window.__voiceTamer = {

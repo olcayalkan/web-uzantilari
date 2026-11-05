@@ -41,7 +41,7 @@ function cevir() {
 
 girdiEl.addEventListener("input", () => {
   clearTimeout(zamanlayici);
-  // Her tuşta istek atmak hız sınırına takılır; yazma durunca çevir.
+  // Her tuşta istek atmak hız sınırına takılır, yazma durunca çevir.
   zamanlayici = setTimeout(cevir, 400);
 });
 

@@ -1,4 +1,4 @@
-// Popup: iki mod — "Çöz" (otomatik tanıma + decrypt) ve "Kodla" (seçili yöntemle encrypt).
+// Popup'ta iki mod var: "Çöz" (otomatik tanıma + decrypt) ve "Kodla" (seçili yöntemle encrypt).
 
 const girdiEl = document.getElementById("girdi");
 const anahtarEl = document.getElementById("anahtar");
@@ -138,7 +138,7 @@ function gecikmeliCiz() {
   zamanlayici = setTimeout(cizdir, 150);
 }
 
-// Son mod ve seçili yöntemi hatırla — data katmanı (Depolama) üzerinden.
+// Son mod ve seçili yöntem data katmanı (Depolama) üzerinden hatırlanır.
 function tercihKaydet() {
   Depolama.tercihKaydet(mod, yontemEl.value);
 }
@@ -188,7 +188,7 @@ Depolama.tercihleriYukle((d) => {
   else anahtarAyarla();
 });
 
-// Sayfa-içi otomatik çözme anahtarı; rozeti service worker depodaki değişiklikten günceller.
+// Sayfa-içi otomatik çözme anahtarı. Rozeti service worker depodaki değişiklikten günceller.
 const acikEl = document.getElementById("acik");
 Depolama.acikYukle((v) => { acikEl.checked = v; });
 acikEl.addEventListener("change", () => Depolama.acikKaydet(acikEl.checked));

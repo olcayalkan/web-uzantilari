@@ -1,4 +1,4 @@
-// Domain — ayar doğrulama. Saf: depolama ya da DOM bilmez, Node ile test edilir.
+// Domain katmanı: ayar doğrulama. Depolama ya da DOM bilmez, Node ile test edilir.
 (function (global) {
   "use strict";
   const S = global.Sabitler || (typeof require !== "undefined" ? require("../../../core/sabitler.js") : {});

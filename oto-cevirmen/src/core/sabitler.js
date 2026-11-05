@@ -1,5 +1,5 @@
-// Core — uygulama genelinde paylaşılan sabitler.
-// Content script, popup ve service worker aynı anahtarları kullanmalı; tek yerden gelir.
+// Core katmanı: uygulama genelinde paylaşılan sabitler.
+// Content script, popup ve service worker aynı anahtarları buradan alır.
 (function (global) {
   "use strict";
   const Sabitler = {

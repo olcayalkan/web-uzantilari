@@ -1,5 +1,5 @@
-// Data katmanı — localStorage üzerinde ince sarmalayıcı.
-// chrome.storage yerine localStorage: manifest'te hiç izin istenmesin diye ("storage" dahil).
+// Data katmanı: localStorage üzerinde ince sarmalayıcı.
+// localStorage kullanılır ki manifest'te hiç izin istenmesin ("storage" dahil).
 // Okunan veri güvenilmez sayılır; doğrulamayı domain yapar.
 (function (global) {
   "use strict";

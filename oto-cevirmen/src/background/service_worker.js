@@ -15,7 +15,7 @@ chrome.runtime.onInstalled.addListener(() => {
 });
 
 // Açık/kapalı durum araç çubuğunda her an görünsün. Rozet Sola İtele ile
-// birebir aynı (varsayılan renkte "AÇIK"); iki uzantı yan yana tutarlı dursun.
+// birebir aynı (varsayılan renkte "AÇIK"), iki uzantı yan yana tutarlı dursun.
 // "KAPALI" rozete sığmadığı için kapalı durumu gri simge taşır.
 function durumGoster(acik) {
   const ek = acik ? "" : "-kapali";
@@ -26,7 +26,7 @@ function durumGoster(acik) {
 }
 
 // setIcon/rozet tarayıcı yeniden açılınca ya da eklenti yenilenince sıfırlanır.
-// Olaylara güvenmek yerine SW her uyandığında durumu yeniden çiz; ucuz bir çağrı.
+// Bu yüzden SW her uyandığında durumu yeniden çizer. Çağrı ucuz.
 chrome.runtime.onStartup.addListener(() => Depolama.otomatikYukle(durumGoster));
 Depolama.otomatikYukle(durumGoster);
 Depolama.otomatikIzle(durumGoster);
@@ -47,8 +47,8 @@ function sekmeyeIlet(sekme, metin) {
     // Content script yoksa (chrome://, Web Mağazası, PDF) popup'a devret.
     if (chrome.runtime.lastError && metin) {
       Depolama.secimKaydet(metin);
-      // openPopup eski Chrome'larda yok ya da kullanıcı hareketi ister; olmazsa
-      // seçim yine saklı, simgeye tıklayınca popup onu açar.
+      // openPopup eski Chrome'larda yok ya da kullanıcı hareketi ister. Açılamazsa
+      // seçim saklı kalır, simgeye tıklayınca popup onu gösterir.
       try { chrome.action.openPopup().catch(() => {}); } catch (_) {}
     }
   });

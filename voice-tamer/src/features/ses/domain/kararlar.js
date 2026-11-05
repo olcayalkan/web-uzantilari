@@ -1,4 +1,4 @@
-// Domain — sesin ne kadar kesileceğine karar veren saf fonksiyonlar.
+// Domain katmanı: sesin ne kadar kesileceğine karar veren saf fonksiyonlar.
 // Web Audio bilmez: ölçülen RMS değerlerini alır, dB ya da kazanç döndürür.
 // Ayar nesnesi dışarıdan verilir; panel onu değiştirince kararlar anında izler.
 (function (global) {
@@ -33,19 +33,19 @@
     }
 
     /* Frekans dengeleyici: anlık seviye bant ortalamasının üstüne çıkınca o bant
-     * o kadar kısılır. Yalnız AŞAĞI yönlü; çukurlar doldurulmaz, yoksa fon gürültüsü
-     * ve tizlik öne çıkardı (ölçümde çift yönlü daha kötü çıktı). */
+     * o kadar kısılır. Yalnızca aşağı yönlü çalışır: çukurları doldurmak fon gürültüsünü
+     * ve tizliği öne çıkarıyordu (ölçümde çift yönlü daha kötü çıktı). */
     function evenCutFor(cur, avg) {
       if (S.evenAmt <= 0 || avg < 1e-5 || cur < 1e-6) return 0;
       const devDb = 20 * Math.log10(cur / avg);        // ortalamadan sapma
       return -clamp(devDb, 0, S.evenDepth) * S.evenAmt;
     }
 
-    /* AGC: SADECE AŞAĞI YÖNLÜ. Ölçümde yükseltme ters tepti (sakin bölümler yükselince
-     * yorgunluk artıyor), tavan 1.0. Sessizlikte 1.0 döner ki fon gürültüsü büyümesin. */
+    /* AGC yalnızca aşağı yönlü, tavanı 1.0. Ölçümde yükseltme ters tepti (sakin bölümler
+     * yükselince yorgunluk artıyor). Sessizlikte 1.0 döner ki fon gürültüsü büyümesin. */
     function agcFor(env) {
       if (S.level <= 0 || env < 0.002) return 1;
-      const g = clamp(K.AGC_TARGET / env, 1 / 3, 1);     // en fazla 3x kıs, yükseltme YOK
+      const g = clamp(K.AGC_TARGET / env, 1 / 3, 1);     // en fazla 3x kıs, yükseltme yok
       return 1 + (g - 1) * S.level;
     }
 

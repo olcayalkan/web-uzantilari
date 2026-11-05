@@ -1,11 +1,11 @@
-// Core — Voice Tamer genelinde paylaşılan sabitler: ayar şeması, kalibrasyon eşikleri,
-// hazır ayarlar. Domain, data ve panel aynı sınırları kullanmalı; tek yerden gelir.
+// Core katmanı. Voice Tamer genelinde paylaşılan sabitler: ayar şeması, kalibrasyon
+// eşikleri, hazır ayarlar. Domain, data ve panel aynı sınırları buradan alır.
 (function (global) {
   "use strict";
 
   /* Ayar şeması. Her alanın tipi ve SINIRI burada. localStorage'ı aynı origin'deki
-   * başka bir script bozabilir; sınırsız "output" duyma güvenliği açısından tehlikeli
-   * olurdu. Anahtar sırası paneldeki etiket numaralarıyla (v1..v16) eşleşir, değiştirme. */
+   * başka bir script bozabilir. Sınırı olmayan bir "output" sesi kulağa zarar verecek
+   * kadar açabilirdi. Anahtar sırası paneldeki etiket numaralarıyla (v1..v16) eşleşir, değiştirme. */
   const SPEC = {
     deessMax:   { min: 0,    max: 24,   def: 10   },  // dB, maks sibilans kesme
     deessFreq:  { min: 4500, max: 9500, def: 7000 },  // Hz
@@ -17,7 +17,7 @@
     hpFreq:     { min: 60,   max: 250,  def: 100  },  // Hz, gırtlak hırıltısının altı
     level:      { min: 0,    max: 1,    def: 0.6  },  // seviye sabitleme (AGC)
     comp:       { min: 0,    max: 1,    def: 0.5  },
-    output:     { min: 0.2,  max: 3,    def: 1    },  // ÜST SINIR ÖNEMLİ
+    output:     { min: 0.2,  max: 3,    def: 1    },  // üst sınır işitme güvenliği için
     burstMax:   { min: 0,    max: 36,   def: 12   },  // dB, ses patlaması bastırma
     burstFreq:  { min: 500,  max: 3000, def: 1200 },  // Hz, patlamanın oturduğu bant
     burstSens:  { min: 1.10, max: 3.00, def: 1.50 },  // düşük = daha sık tetiklenir

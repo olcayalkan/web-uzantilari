@@ -1,12 +1,12 @@
-// Oto Çözücü — CTF kodlama/şifre motoru.
-// Hem ayrı dosya (popup + arka plan ortak), hem çift yönlü: her yöntemde
+// Oto Çözücü: CTF kodlama/şifre motoru.
+// Popup ve arka plan bu dosyayı ortak kullanır. Her yöntem çift yönlüdür:
 // coz = decode/decrypt, kodla = encode/encrypt. Otomatik tanıma, çözülen metnin
 // "doğal dil" benzerliğine göre puanlar (CyberChef "Magic" mantığı).
 
 (function (global) {
   "use strict";
 
-  // --- Bayt yardımcıları ---
+  // Bayt yardımcıları
   const ENC = new TextEncoder();
   function metniBaytlar(s) { return ENC.encode(s); }
   function baytlariMetne(b) { return new TextDecoder("utf-8", { fatal: false }).decode(new Uint8Array(b)); }
@@ -27,7 +27,7 @@
     "la ar en ir bi ki ni ek ak il im ya ye na da ba ca sı li lı me mi ra ri yo du bu"
   ).split(" "));
 
-  // --- Okunabilirlik puanı (0..1): gerçek metni çöpten ayırır ---
+  // Okunabilirlik puanı (0..1): gerçek metni çöpten ayırır.
   function okunabilirlikPuani(metin) {
     const dizi = [...metin];
     const n = dizi.length;
@@ -357,7 +357,7 @@
   function vigenereCoz(g, a) { return vigenere(g, a, -1); }
   function vigenereKodla(g, a) { return vigenere(g, a, 1); }
 
-  // Gronsfeld — Vigenère benzeri ama anahtar rakam dizisi (her rakam kaydırma).
+  // Gronsfeld: anahtarı rakam dizisi olan Vigenère, her rakam bir kaydırma.
   function gronsfeld(g, anahtar, yon) {
     const d = (anahtar || "").replace(/\D/g, ""); if (!d) return null;
     let i = 0, degisti = false;
@@ -367,7 +367,7 @@
   function gronsfeldCoz(g, a) { return gronsfeld(g, a, -1); }
   function gronsfeldKodla(g, a) { return gronsfeld(g, a, 1); }
 
-  // Playfair — anahtar kelimeli 5×5 kare (I/J birleşik). Digraf (harf çifti) şifresi.
+  // Playfair: anahtar kelimeli 5×5 kare (I/J birleşik), harf çiftlerini (digraf) şifreler.
   function playfairKare(anahtar) {
     const a = (anahtar || "").toUpperCase().replace(/J/g, "I").replace(/[^A-Z]/g, "");
     const gorulen = new Set(); const kare = [];
@@ -398,7 +398,7 @@
     return o;
   }
 
-  // Bifid — anahtarlı 5×5 kare (playfairKare) + koordinat fraksiyonlaması (periyot = tüm metin).
+  // Bifid: anahtarlı 5×5 kare (playfairKare) + koordinat fraksiyonlaması (periyot = tüm metin).
   function bifidKodla(g, anahtar) {
     const kare = playfairKare(anahtar); if (kare.length < 25) return null;
     const s = g.toUpperCase().replace(/J/g, "I").replace(/[^A-Z]/g, ""); if (!s) return null;
@@ -522,7 +522,7 @@
       if (araKatman) sira += 0.45;   // çıktı temiz kodlama → çok katlıda güçlü sinyal
       // Kullanıcı anahtar verip o yöntem çalıştıysa güçlü öncelik (niyet sinyali).
       if (anahtarKullanildi) sira += 0.4;
-      // Düşük okunabilirlik elenir — ama geçerli ara-katman ve anahtarlı çözüm korunur.
+      // Düşük okunabilirlik elenir. Geçerli ara katman ve anahtarlı çözüm bundan muaf.
       if (puan < ESIK && !araKatman && !anahtarKullanildi) continue;
       sonuc.push({ yontem: y.ad + (not ? " — " + not : ""), cikti, puan, sira });
     }
@@ -539,7 +539,7 @@
   // Kodlanabilir yöntem listesi (dropdown için).
   function kodlaYontemleri() { return KAYIT.filter((y) => y.kodla).map((y) => ({ ad: y.ad, anahtar: y.anahtar || null })); }
 
-  // Hash tanıma — hash'ler geri çözülemez, ama CTF'de türü sık sorulur.
+  // Hash tanıma: hash geri çözülemez, ama CTF'de türü sık sorulur.
   // Uzunluk + karakter deseni + öntakı ile olası türleri listeler.
   function hashTani(girdi) {
     const t = girdi.trim();
@@ -547,7 +547,7 @@
     const sonuc = [];
     const ekle = (tur, not) => sonuc.push({ tur, not: not || "" });
 
-    // Öntakılı (crypt) formatlar — kesin.
+    // Öntakılı (crypt) biçimler kesin tanınır.
     if (/^\$2[aby]\$\d{2}\$[./A-Za-z0-9]{53}$/.test(t)) ekle("bcrypt", "$2a/2b/2y$");
     else if (/^\$argon2(id|i|d)\$/.test(t)) ekle("Argon2", t.match(/^\$argon2(id|i|d)/)[0].slice(1));
     else if (/^\$6\$/.test(t)) ekle("sha512crypt", "$6$");
@@ -557,7 +557,7 @@
     else if (/^\{SHA\}/.test(t)) ekle("LDAP SHA", "");
     else if (/^[./A-Za-z0-9]{13}$/.test(t) && !/^[0-9a-fA-F]+$/.test(t)) ekle("DES crypt (traditional)", "13 karakter");
 
-    // Saf hex — uzunluğa göre aday türler.
+    // Saf hex: uzunluğa göre aday türler.
     if (/^[0-9a-fA-F]+$/.test(t)) {
       const n = t.length;
       const harita = {

@@ -1,8 +1,8 @@
 // README'de kendiliğinden oynayan kurulum animasyonlarını üretir: docs/videolar/<uzantı>.svg
 //
 // NotDefteri'deki sistemin aynısı: vektör SVG + CSS anahtar kareleri. GitHub hareketli GIF'e
-// oynat/duraklat düğmesi koyar ve "hareketi azalt" açıkken GIF'i durdurur; <img> içindeki
-// SVG'nin CSS animasyonuna dokunmaz, sayfa açılınca oynar. Sesli/tam video docs/videolar/<uzantı>.mp4.
+// oynat/duraklat düğmesi koyar ve "hareketi azalt" açıkken GIF'i durdurur. <img> içindeki
+// SVG'nin CSS animasyonuna dokunmadığı için SVG sayfa açılınca oynar. Tam video: docs/videolar/<uzantı>.mp4.
 //
 // Sahne (sahne.html) her önemli anda bir kez çizilir, o anki DOM serilestir.js ile vektöre
 // çevrilir; zamanlama sahnedeki gorun()/goster() çizelgesinin CSS karşılığıdır. Hareket yalnızca
@@ -179,7 +179,7 @@ async function uret(u) {
     sonuc += await ciz(R + .3, q("#sayfa-cerceve"));
     await ev(`window.render(${R + 2})`);
     const S = await ev("window.SECIM");
-    // Seçim vurgusu: çarpma karışımıyla zemini boyar, yazıyı örtmez; sağa doğru büyür.
+    // Seçim vurgusu çarpma karışımıyla zemini boyar, yazıyı örtmez. Sağa doğru büyür.
     s.kareler("secim", [[S.A, { transform: "scaleX(0)" }, IKIYAN], [S.B, { transform: "scaleX(1)" }]], [S.x, S.y]);
     sonuc += `<rect class="secim" x="${n(S.x)}" y="${n(S.y)}" width="${n(S.w)}" height="${n(S.h)}" fill="rgb(200,200,200)" style="mix-blend-mode:multiply"/>`;
     s.goster("balon", S.B);
@@ -197,7 +197,7 @@ async function uret(u) {
   s.goster("menu-yonet", 7.95, 8.15);
   const altmenu = g("altmenu", (await ciz(7.8, q("#altmenu"))) + g("menu-yonet", await ciz(8.05, q("#m-yonet"))));
 
-  // Pencerenin gölgesi kırpmanın dışında: kırpma kutunun kendi gölgesini de kesiyordu.
+  // Pencerenin gölgesi kırpmanın dışında çizilir, yoksa kırpma kutunun kendi gölgesini de keser.
   const pencere = `<rect x="${n(P.x)}" y="${n(P.y)}" width="${n(P.w)}" height="${n(P.h)}" rx="18" fill="#fff" filter="url(#pencere-golge)"/><g ${kirpma("pencere-k", P, 18)}>${cerceve}${ust}<g ${kirpma("icerik-k", IC)}>${icerik}</g>${menu}${altmenu}${pencereUstu}</g>`;
 
   // Adım başlıkları
@@ -207,7 +207,7 @@ async function uret(u) {
     basliklar += g(`baslik${i} gecici`, await ciz(a + .6, q("#baslik")));
   }
 
-  // 6 · Kapanış; döngü başa dönmeden önce söner.
+  // 6 · Kapanış, döngü başa dönmeden önce söner.
   let kapanis = "";
   for (const [i, id] of ["#kp-simge", "#kp-ad", "#kp-adres", "#kp-adim", "#kp-tar"].entries()) {
     await ev("window.render(22.8)");
@@ -238,7 +238,7 @@ async function uret(u) {
   const baslik = `${AD[u]}: Chrome menüsünden kurulum (⋮ → Uzantılar → Uzantıları yönet, Geliştirici modu, Paketlenmemiş öğe yükle) ve ilk kullanım`;
   const svg = `<svg xmlns="http://www.w3.org/2000/svg" width="1920" height="1080" viewBox="0 0 1920 1080" role="img" aria-label="${baslik}"><title>${baslik}</title>`
     + `<defs>${tanim}${kirp.join("")}<filter id="pencere-golge" x="-10%" y="-10%" width="120%" height="130%"><feDropShadow dx="0" dy="30" stdDeviation="30" flood-color="rgb(31,35,48)" flood-opacity="0.28"/></filter><filter id="imlec-golge" x="-50%" y="-50%" width="200%" height="200%"><feDropShadow dx="0" dy="1.6" stdDeviation="1.2" flood-opacity="0.3"/></filter></defs>`
-    // Animasyonsuz görüntüleyicide yalnızca kanca görünür; zamanlı katmanlar gizli başlar.
+    // Animasyonsuz görüntüleyicide yalnızca kanca görünsün diye zamanlı katmanlar gizli başlar.
     + `<style>.gecici{opacity:0}.pencere{opacity:0}${s.css.join("")}</style>`
     + zemin + g("kanca", kanca) + g("pencere", pencere) + basliklar + g("kapanis", kapanis) + halkalar + imlec + "</svg>\n";
   const yol = join(KOK, "docs", "videolar", `${u}.svg`);

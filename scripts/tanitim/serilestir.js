@@ -267,7 +267,7 @@
   }
 
   // kok: öğe; haric: çizilmeyecek öğeler; sadeceCocuklar: kökün kendi kutusu/kırpması yok;
-  // sarmal: { el, sinif } — o öğenin çocukları bir <g class> içine (kaydırma animasyonu için).
+  // sarmal: { el, sinif }, o öğenin çocukları bir <g class> içine girer (kaydırma animasyonu için).
   window.serilestir = (kok, { haric = [], sadeceCocuklar = false, sarmal = null } = {}) => {
     const cikti = [];
     eleman(kok, harita(kok.ownerDocument), cikti, { haric: haric.filter(Boolean), sadeceCocuklar, sarmal }, true);

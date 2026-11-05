@@ -1,4 +1,4 @@
-// Presentation — sayfaya uygulama. Hesabı domain yapar (itele_motoru.js); burası
+// Presentation katmanı. Hesabı domain yapar (itele_motoru.js), bu dosya sayfayı
 // ölçer, satır içi stil yazar ve değişiklikleri geri alır.
 (() => {
   const S = Sabitler;

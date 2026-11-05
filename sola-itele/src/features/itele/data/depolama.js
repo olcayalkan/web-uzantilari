@@ -1,5 +1,5 @@
-// Data katmanı — chrome.storage.local üzerinde ince sarmalayıcı. Bileşenler birbirine
-// mesaj göndermez; tek ortak nokta bu kayıttır. Panel yazar, diğerleri izler.
+// Data katmanı: chrome.storage.local üzerinde ince sarmalayıcı. Bileşenler birbirine
+// mesaj göndermez, tek ortak nokta bu kayıttır. Panel yazar, diğerleri izler.
 (function (global) {
   'use strict';
   const K = global.Sabitler.DEPO_ANAHTAR;

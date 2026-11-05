@@ -1,4 +1,4 @@
-// Motor test paketi — `node test.js`. Tarayıcı gerektirmez.
+// Motor testleri: `node test.js`. Tarayıcı gerektirmez.
 // `node test.js --ag` ayrıca gerçek Google uç noktasını dener (internet gerekir).
 
 global.self = global;

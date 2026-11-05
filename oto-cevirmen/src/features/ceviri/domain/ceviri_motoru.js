@@ -1,12 +1,12 @@
-// Domain — saf çeviri mantığı: girdi süzme, parçalama, istek adresi, yanıt çözme.
-// chrome API'si ve ağ yok; bu yüzden Node ile doğrudan test edilebilir.
+// Domain katmanı. Saf çeviri mantığı: girdi süzme, parçalama, istek adresi, yanıt çözme.
+// chrome API'si ve ağ kullanmadığı için Node ile doğrudan test edilebilir.
 (function (global) {
   "use strict";
   const S = global.Sabitler || (typeof require !== "undefined" ? require("../../../core/sabitler.js") : {});
 
   const UC = "https://translate.googleapis.com/translate_a/single";
 
-  // Yalnızca sayı/sembol ya da tek bir URL seçildiyse çeviri anlamsız; balon
+  // Yalnızca sayı/sembol ya da tek bir URL seçildiyse çeviri anlamsız. Balon
   // açılırsa kullanıcı her kopyalama seçiminde rahatsız olur.
   function uygunMu(metin) {
     if (typeof metin !== "string") return false;

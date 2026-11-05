@@ -1,4 +1,4 @@
-// Presentation — panel. Yalnızca depoya yazar; sayfalar ve rozet onChanged ile güncellenir.
+// Presentation katmanı: panel. Yalnızca depoya yazar, sayfalar ve rozet onChanged ile güncellenir.
 const acikKutu = document.getElementById('acik');
 const oranKaydirici = document.getElementById('oran');
 const deger = document.getElementById('deger');

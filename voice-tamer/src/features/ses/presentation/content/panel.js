@@ -1,12 +1,12 @@
-// Presentation — sayfa üstündeki ayar paneli. Ses motorunu tanımaz; ayar nesnesini
-// değiştirir ve `uygula` geri çağrısıyla haber verir.
+// Presentation katmanı: sayfa üstündeki ayar paneli. Ses motorunu tanımaz, ayar
+// nesnesini değiştirip `uygula` geri çağrısıyla haber verir.
 (function (global) {
   "use strict";
   const K = global.Sabitler;
   const clamp = global.Ayarlar.clamp;
 
-  /* innerHTML yerine DOMParser: YouTube'un Trusted Types politikasına takılmaz,
-   * ve şablon hiçbir dinamik veri içermediği için enjeksiyon yüzeyi sıfır. */
+  /* Şablon DOMParser ile kurulur, innerHTML YouTube'un Trusted Types politikasına
+   * takılırdı. Şablonda dinamik veri olmadığından enjeksiyon yüzeyi de yok. */
   const TPL = `<style>
     :host{all:initial}
     .p{font:12px/1.4 -apple-system,BlinkMacSystemFont,sans-serif;color:#e8e8ea;
@@ -149,7 +149,7 @@
     };
     $("x").onclick = () => setHidden(true);
 
-    // Sürükleme - dinleyiciler sadece sürüklerken bağlı kalır
+    // Sürükleme dinleyicileri yalnızca sürüklerken bağlı kalır
     (() => {
       const h = sh.querySelector(".h");
       let dx = 0, dy = 0;
