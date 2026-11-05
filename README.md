@@ -1,0 +1,63 @@
+# Web Uzantıları
+
+Chrome, Brave ve Edge için dört küçük tarayıcı uzantısı. Hesap, kayıt ya da API
+anahtarı gerektirmezler; üçü hiç ağa çıkmaz.
+
+| Uzantı | Ne yapar | Çalıştığı yer | Ağ | İndir |
+|---|---|---|---|---|
+| **[Oto Çözücü](uzantilar/oto-cozucu/)** | Kodlanmış ya da şifreli metni tanıyıp çözer, istersen kodlar: Base64, Hex, Morse, Vigenère, JWT, hash tanıma ve 30+ yöntem. | Tüm siteler | Yok | [oto-cozucu.zip](https://github.com/olcayalkan/web-uzantilari/releases/latest/download/oto-cozucu.zip) |
+| **[Oto Çevirmen](uzantilar/oto-cevirmen/)** | Sayfada seçtiğin metni Türkçeye çevirip seçimin altında küçük bir balonda gösterir. | Tüm siteler | Google Translate | [oto-cevirmen.zip](https://github.com/olcayalkan/web-uzantilari/releases/latest/download/oto-cevirmen.zip) |
+| **[Sola İtele](uzantilar/sola-itele/)** | Sayfanın içeriğini ekranın soluna iter, genişliği ayarlanabilir orana (varsayılan %70) sınırlar. | Tüm siteler | Yok | [sola-itele.zip](https://github.com/olcayalkan/web-uzantilari/releases/latest/download/sola-itele.zip) |
+| **[Voice Tamer](uzantilar/voice-tamer/)** | YouTube seslerinde tiz, sibilans, gırtlak tınısı ve ani ses patlamalarını yumuşatır. | Yalnızca YouTube | Yok | [voice-tamer.zip](https://github.com/olcayalkan/web-uzantilari/releases/latest/download/voice-tamer.zip) |
+
+## Kurulum
+
+1. Yukarıdan istediğin uzantının zip'ini indir ve bir klasöre çıkar.
+2. Tarayıcıda uzantılar sayfasını aç: `chrome://extensions`, `brave://extensions`
+   ya da `edge://extensions`.
+3. Sağ üstten **Geliştirici modu**'nu aç.
+4. **Paketlenmemiş öğe yükle** düğmesine bas ve çıkardığın klasörü seç
+   (içinde `manifest.json` olan klasör).
+5. Uzantı yüklenmeden önce açık olan sekmeleri bir kez yenile.
+
+Güncelleme, kaldırma ve sık sorunlar için: [docs/kurulum.md](docs/kurulum.md).
+
+> Uzantılar Chrome Web Mağazası'nda değil; bu yüzden geliştirici modu gerekiyor.
+
+## Gizlilik ve izinler
+
+| Uzantı | İzinler | Veri nereye gider |
+|---|---|---|
+| Oto Çözücü | `contextMenus`, `clipboardRead`, `storage`, `notifications` | Hiçbir yere. Tüm çözme işlemi tarayıcıda yapılır. |
+| Oto Çevirmen | `contextMenus`, `storage`, `translate.googleapis.com` | Seçilen metin çeviri için Google Translate'e gider. Başka yere gitmez. Hassas sayfalarda otomatik modu kapat. |
+| Sola İtele | `storage` | Hiçbir yere. Sayfa içeriğini okumaz. |
+| Voice Tamer | Yok | Hiçbir yere. Ayarlar YouTube'un yerel deposunda durur. |
+
+Kod açık; her uzantının klasöründe ne yaptığı ve neden o izni istediği yazıyor.
+
+## Geliştirici
+
+```
+uzantilar/<ad>/          Her biri kendi başına yüklenebilir bir uzantı
+  manifest.json
+  icons/
+  src/
+    core/                Paylaşılan sabitler
+    features/<özellik>/
+      domain/            Saf iş mantığı: tarayıcı API'si yok, Node ile test edilir
+      data/              Depolama, ağ, Web Audio gibi dış dünya bağdaştırıcıları
+      presentation/      Popup ve sayfa içi arayüz
+    background/          Service worker
+  tests/
+scripts/                 Paketleme, test, gizli bilgi taraması, manifest denetimi
+docs/                    Kurulum, mimari, geliştirme
+```
+
+```bash
+scripts/test.sh          # tüm testler (Chrome varsa tarayıcı testleri de)
+scripts/gizli-tara.sh    # anahtar, token, kişisel yol taraması
+scripts/paketle.sh       # dist/<ad>.zip
+```
+
+Katman kuralı ve yeni uzantı ekleme: [docs/mimari.md](docs/mimari.md),
+[docs/gelistirme.md](docs/gelistirme.md).

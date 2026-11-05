@@ -1,0 +1,54 @@
+{
+  "manifest_version": 3,
+  "name": "Voice Tamer",
+  "version": "1.1.0",
+  "description": "YouTube seslerinde tiz, sibilans ve sertlik bastırıcı. Tamamen yerel çalışır, ağ erişimi yoktur.",
+  "icons": {
+    "16": "icons/icon16.png",
+    "32": "icons/icon32.png",
+    "48": "icons/icon48.png",
+    "128": "icons/icon128.png"
+  },
+  "action": {
+    "default_title": "Voice Tamer panelini aç/kapat",
+    "default_icon": {
+      "16": "icons/icon16.png",
+      "32": "icons/icon32.png",
+      "48": "icons/icon48.png",
+      "128": "icons/icon128.png"
+    }
+  },
+  "background": {
+    "service_worker": "src/background/service_worker.js"
+  },
+  "content_scripts": [
+    {
+      "matches": [
+        "https://www.youtube.com/*",
+        "https://m.youtube.com/*",
+        "https://music.youtube.com/*"
+      ],
+      "js": [
+        "src/core/sabitler.js",
+        "src/features/ses/domain/ayarlar.js",
+        "src/features/ses/domain/kararlar.js",
+        "src/features/ses/data/depolama.js",
+        "src/features/ses/data/ses_motoru.js",
+        "src/features/ses/presentation/content/panel.js",
+        "src/features/ses/presentation/content/content.js",
+        "src/features/ses/presentation/content/kopru.js"
+      ],
+      "run_at": "document_idle",
+      "all_frames": false
+    }
+  ],
+  "commands": {
+    "toggle-panel": {
+      "suggested_key": {
+        "default": "Alt+Shift+V",
+        "mac": "Alt+Shift+V"
+      },
+      "description": "Voice Tamer panelini aç/kapat"
+    }
+  }
+}

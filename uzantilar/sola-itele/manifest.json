@@ -1,0 +1,30 @@
+{
+  "manifest_version": 3,
+  "name": "Sola İtele",
+  "version": "1.1.0",
+  "description": "Sayfanın tüm içeriğini ekranın soluna iter ve kullanılan genişliği ayarlanabilir orana (varsayılan %70) sınırlar.",
+  "permissions": [
+    "storage"
+  ],
+  "background": {
+    "service_worker": "src/background/service_worker.js"
+  },
+  "action": {
+    "default_title": "Sola İtele",
+    "default_popup": "src/features/itele/presentation/popup/popup.html"
+  },
+  "content_scripts": [
+    {
+      "matches": [
+        "<all_urls>"
+      ],
+      "js": [
+        "src/core/sabitler.js",
+        "src/features/itele/domain/itele_motoru.js",
+        "src/features/itele/data/depolama.js",
+        "src/features/itele/presentation/content/content.js"
+      ],
+      "run_at": "document_start"
+    }
+  ]
+}

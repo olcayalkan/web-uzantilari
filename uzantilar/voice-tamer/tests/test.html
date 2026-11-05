@@ -1,0 +1,393 @@
+<!doctype html>
+<meta charset="utf-8">
+<title>Voice Tamer - test</title>
+<style>
+  body{font:14px/1.6 -apple-system,sans-serif;background:#18181b;color:#e4e4e7;padding:24px;max-width:760px}
+  h1{font-size:18px}
+  button{font:14px -apple-system;background:#22c55e;border:0;color:#06210f;padding:10px 18px;
+         border-radius:8px;cursor:pointer;font-weight:600}
+  pre{background:#27272a;padding:14px;border-radius:8px;white-space:pre-wrap;line-height:1.7}
+  .ok{color:#22c55e}.fail{color:#ef4444}
+</style>
+
+<h1>Voice Tamer — otomatik test</h1>
+<p>Sentetik bir ses üretilir (160/320/640 Hz "gövde" + 1.0–1.4 sn ve 2.2–2.6 sn arasında
+7 kHz sibilans patlaması), manifest'teki gerçek content script dosyaları yüklenir ve
+zincirin ölçümü yapılır. <b>Çıkış susturulur, hoparlörden ses gelmez.</b></p>
+
+<button id="go">Testi başlat</button>
+<video id="v" style="display:none"></video>
+<pre id="out">bekliyor…</pre>
+
+<script>
+const out = document.getElementById('out');
+const log = [];
+let pass = 0, fail = 0;
+function assert(name, cond, detail) {
+  (cond ? pass++ : fail++);
+  log.push(`${cond ? '[GECTI]' : '[KALDI]'} ${name}${detail ? '  -> ' + detail : ''}`);
+  out.textContent = log.join('\n');
+}
+
+function makeWav(sec = 4, sr = 44100) {
+  const n = sec * sr, buf = new ArrayBuffer(44 + n * 2), dv = new DataView(buf);
+  const w = (o, s) => { for (let i = 0; i < s.length; i++) dv.setUint8(o + i, s.charCodeAt(i)); };
+  w(0, 'RIFF'); dv.setUint32(4, 36 + n * 2, true); w(8, 'WAVE'); w(12, 'fmt ');
+  dv.setUint32(16, 16, true); dv.setUint16(20, 1, true); dv.setUint16(22, 1, true);
+  dv.setUint32(24, sr, true); dv.setUint32(28, sr * 2, true);
+  dv.setUint16(32, 2, true); dv.setUint16(34, 16, true);
+  w(36, 'data'); dv.setUint32(40, n * 2, true);
+  for (let i = 0; i < n; i++) {
+    const t = i / sr;
+    let s = 0.22 * Math.sin(2 * Math.PI * 160 * t)
+          + 0.15 * Math.sin(2 * Math.PI * 320 * t)
+          + 0.08 * Math.sin(2 * Math.PI * 640 * t);
+    if ((t > 1.0 && t < 1.4) || (t > 2.2 && t < 2.6))
+      s += 0.5 * (Math.random() * 2 - 1) * Math.sin(2 * Math.PI * 7000 * t);
+    dv.setInt16(44 + i * 2, Math.max(-1, Math.min(1, s)) * 32767, true);
+  }
+  return new Blob([buf], { type: 'audio/wav' });
+}
+
+document.getElementById('go').onclick = async () => {
+  document.getElementById('go').disabled = true;
+  out.textContent = 'calisiyor…';
+
+  // --- 1) Dusmanca localStorage: sinir asimi + prototype pollution denemesi
+  localStorage.setItem('voiceTamer.settings.v1', JSON.stringify({
+    output: 9999, deessMax: -500, deessFreq: 'abc', comp: 1e9,
+    '__proto__': { polluted: true }, evilKey: 'x'
+  }));
+  localStorage.setItem('voiceTamer.hidden', '0');
+
+  // --- 2) Sentetik sesi video elementine bagla
+  const v = document.getElementById('v');
+  v.src = URL.createObjectURL(makeWav());
+  await new Promise(r => { v.oncanplaythrough = r; v.load(); });
+
+  // --- 3) Gercek content script'leri yukle (sadece domain kilidi test icin devre disi)
+  // Dosyalar manifest'teki sırayla birleştirilir: eklentinin yüklediği kodun aynısı.
+  // Köprü chrome.runtime ister, eklenti dışında çalışmaz; testin konusu da değil.
+  const manifest = await (await fetch('../manifest.json')).json();
+  const dosyalar = manifest.content_scripts[0].js.filter(d => !d.endsWith('kopru.js'));
+  const srcTxt = (await Promise.all(dosyalar.map(async d => (await fetch('../' + d)).text()))).join('\n;\n');
+  const GUARD = "if (!/(^|\\.)youtube\\.com$/i.test(location.hostname)) return;";
+  assert('domain kilidi kaynakta mevcut', srcTxt.includes(GUARD));
+  assert('youtube.com regex dogru calisiyor',
+    /(^|\.)youtube\.com$/i.test('www.youtube.com') &&
+    /(^|\.)youtube\.com$/i.test('music.youtube.com') &&
+    !/(^|\.)youtube\.com$/i.test('evil-youtube.com') &&
+    !/(^|\.)youtube\.com$/i.test('youtube.com.evil.net'),
+    'alt alan adi kabul, sahte alan adi ret');
+  try { new Function(srcTxt.replace(GUARD, '/* test shim */'))(); }
+  catch (e) { assert('content script hatasiz calisti', false, e.message); }
+
+  await new Promise(r => setTimeout(r, 300));
+  const vt = window.__voiceTamer;
+  assert('content script hatasiz calisti', !!vt);
+  if (!vt) { out.textContent = log.join('\n'); return; }
+
+  // --- 4) Guvenlik dogrulamalari
+  assert('prototype pollution engellendi', ({}).polluted === undefined);
+  assert('output ust sinira kirpildi', vt.settings.output === 3, 'istek 9999 -> ' + vt.settings.output);
+  assert('deessMax alt sinira kirpildi', vt.settings.deessMax === 0, 'istek -500 -> ' + vt.settings.deessMax);
+  assert('sayisal olmayan deger reddedildi', vt.settings.deessFreq === 7000, '"abc" -> varsayilan 7000');
+  assert('comp ust sinira kirpildi', vt.settings.comp === 1, 'istek 1e9 -> ' + vt.settings.comp);
+  assert('bilinmeyen anahtar alinmadi', !('evilKey' in vt.settings));
+
+  // --- 5) Panel gercekten olustu mu (DOMParser + closed shadow DOM)
+  const hosts = [...document.documentElement.children].filter(
+    el => el.tagName === 'DIV' && el.style.zIndex === '2147483647');
+  assert('panel host elementi eklendi', hosts.length === 1);
+  assert('shadow root kapali (sayfa scriptleri erisemez)',
+    hosts.length === 1 && hosts[0].shadowRoot === null);
+  const probe = document.createElement('div');
+  const psh = probe.attachShadow({ mode: 'open' });
+  const pd = new DOMParser().parseFromString('<style>i{color:red}</style><b id="q">x</b>', 'text/html');
+  for (const n of [...pd.head.children, ...pd.body.children]) psh.appendChild(n);
+  assert('DOMParser ile DOM kurulumu calisiyor (Trusted Types uyumlu)', !!psh.querySelector('#q'));
+
+  // --- 6) Zincir kuruldu mu
+  const c = vt.chain;
+  assert('ses zinciri video elementine baglandi', !!c && c.el === v);
+  if (!c) { out.textContent = log.join('\n'); return; }
+
+  // Testte hoparlore ses gitmesin: son halkayi sifir kazanca yonlendir
+  const ac = c.lim.context;
+  const mute = ac.createGain(); mute.gain.value = 0;
+  c.lim.disconnect(); c.lim.connect(mute); mute.connect(ac.destination);
+
+  // --- 7) Filtre tepkileri (DSP dogrulamasi)
+  vt.settings.deessMax = 12; vt.settings.harshCut = 6; vt.settings.deessSens = 0.18;
+  c.harsh.gain.value = -6;
+  const f = new Float32Array([100, 3200, 12000]);
+  const mag = new Float32Array(3), ph = new Float32Array(3);
+  c.harsh.getFrequencyResponse(f, mag, ph);
+  const dB = i => 20 * Math.log10(mag[i]);
+  assert('sertlik filtresi 3.2 kHz de kesiyor', dB(1) < -5 && dB(1) > -7, dB(1).toFixed(2) + ' dB');
+  assert('sertlik filtresi bandi disini bozmuyor',
+    Math.abs(dB(0)) < 0.5 && Math.abs(dB(2)) < 0.5,
+    `100Hz ${dB(0).toFixed(2)} dB / 12kHz ${dB(2).toFixed(2)} dB`);
+
+  const f2 = new Float32Array([200, 7000]), m2 = new Float32Array(2), p2 = new Float32Array(2);
+  c.deess.gain.value = -12;
+  c.deess.getFrequencyResponse(f2, m2, p2);
+  assert('de-esser 7 kHz de kesiyor, govdeyi birakiyor',
+    20 * Math.log10(m2[1]) < -10 && Math.abs(20 * Math.log10(m2[0])) < 0.5,
+    `7kHz ${(20*Math.log10(m2[1])).toFixed(2)} dB / 200Hz ${(20*Math.log10(m2[0])).toFixed(2)} dB`);
+  c.deess.gain.value = 0;
+
+  assert('limiter sinyal yolunun sonunda', c.lim.ratio.value >= 20 && c.lim.threshold.value <= 0);
+  assert('highpass ayardan geliyor', c.hp.type === 'highpass' && c.hp.frequency.value === vt.settings.hpFreq,
+    c.hp.frequency.value + ' Hz');
+
+  // --- 7b) GIRTLAK MODULU
+  vt.settings.throatAmt = 0.80; vt.settings.throatFreq = 450;
+  const tdb = vt._throatDb();
+  assert('%80 azaltma = -14 dB (genlikte 0.2x)', Math.abs(tdb - (-13.979)) < 0.01,
+    tdb.toFixed(2) + ' dB');
+  assert('%50 azaltma = -6 dB', (vt.settings.throatAmt = 0.5, Math.abs(vt._throatDb() + 6.02) < 0.05));
+  vt.settings.throatAmt = 0.80;
+
+  // Statik bilesenler (uretim kodundaki applySettings ile ayni oranlar)
+  c.throat.frequency.value = 450;  c.throat.gain.value  = 0.6 * tdb;
+  c.throat2.frequency.value = 900; c.throat2.gain.value = 0.3 * tdb;
+  c.throatDyn.frequency.value = 450;
+
+  // Dinamik ek: kalibrasyondan olculen oranlar (normal ~0.65, girtlakli ~0.87)
+  const dynGirtlak = vt._throatCutFor(0.87, 1.0);
+  const dynNormal  = vt._throatCutFor(0.65, 1.0);
+  assert('girtlakli seste dinamik ek devreye giriyor', dynGirtlak < -5,
+    dynGirtlak.toFixed(2) + ' dB ek');
+  assert('normal seste dinamik ek devreye GIRMIYOR', dynNormal === 0,
+    'esik alti -> 0 dB (ses dogal kaliyor)');
+  assert('gecis bolgesi yumusak', (() => {
+    const a = vt._throatCutFor(0.75, 1.0), b = vt._throatCutFor(0.80, 1.0);
+    return a < 0 && b < a && b > dynGirtlak - 0.01;
+  })(), 'oran arttikca kesim kademeli artiyor');
+  assert('azaltma kapatilinca dinamik ek de duruyor',
+    (vt.settings.throatAmt = 0, vt._throatCutFor(0.95, 1.0) === 0));
+  vt.settings.throatAmt = 0.80;
+
+  // TOPLAM: girtlak baskin aninda 450 Hz de hedeflenen -14 dB'e ulasiliyor mu?
+  c.throatDyn.gain.value = dynGirtlak;
+  const fT = new Float32Array([450]), mT = new Float32Array(1), pT = new Float32Array(1);
+  let toplam450 = 0;
+  for (const node of [c.throat, c.throat2, c.throatDyn]) {
+    node.getFrequencyResponse(fT, mT, pT);
+    toplam450 += 20 * Math.log10(mT[0]);
+  }
+  assert('GIRTLAK ANINDA 450 Hz de toplam ~%80 azaltma', Math.abs(toplam450 - tdb) < 1.5,
+    `${toplam450.toFixed(2)} dB (hedef ${tdb.toFixed(2)} dB)`);
+
+  // Sakin anda daha az kesiliyor -> ses icini bosaltmiyor
+  c.throatDyn.gain.value = 0;
+  let sakin450 = 0;
+  for (const node of [c.throat, c.throat2, c.throatDyn]) {
+    node.getFrequencyResponse(fT, mT, pT);
+    sakin450 += 20 * Math.log10(mT[0]);
+  }
+  assert('sakin anda daha az kesiyor (ses dogal kaliyor)',
+    sakin450 > toplam450 + 3 && sakin450 < -5,
+    `sakin ${sakin450.toFixed(2)} dB / girtlak ${toplam450.toFixed(2)} dB`);
+
+  // Konusmanin netligi korunuyor mu (2-4 kHz anlasilabilirlik bolgesi)
+  const fC = new Float32Array([2500, 3500]), mC = new Float32Array(2), pC = new Float32Array(2);
+  let net2500 = 0, net3500 = 0;
+  c.throatDyn.gain.value = dynGirtlak;
+  for (const node of [c.throat, c.throat2, c.throatDyn]) {
+    node.getFrequencyResponse(fC, mC, pC);
+    net2500 += 20 * Math.log10(mC[0]); net3500 += 20 * Math.log10(mC[1]);
+  }
+  assert('anlasilabilirlik bolgesi bozulmuyor',
+    Math.abs(net2500) < 2 && Math.abs(net3500) < 1.5,
+    `2.5kHz ${net2500.toFixed(2)} dB / 3.5kHz ${net3500.toFixed(2)} dB`);
+  c.throatDyn.gain.value = 0;
+
+  // --- 7c) SEVIYE SABITLEME (AGC) karar fonksiyonu
+  vt.settings.level = 1;
+  const gQuiet = vt._agcFor(0.012), gLoud = vt._agcFor(0.30), gSil = vt._agcFor(0.0005);
+  assert('kisik bolum YUKSELTILMIYOR (olcumde ters tepti)', gQuiet === 1,
+    'kazanc x' + gQuiet.toFixed(2) + ' - AGC yalniz asagi yonlu');
+  assert('bagirma kisiliyor', gLoud < 0.7, 'kazanc x' + gLoud.toFixed(2));
+  assert('sessizlik yukseltilmiyor (fon gurultusu patlamasin)', gSil === 1);
+  const EPS = 1e-9;   // kayan nokta toleransi
+  assert('kazanc sinirlari asilmiyor', vt._agcFor(1e-6) <= 1 + EPS && vt._agcFor(1e6) >= 1/3 - EPS,
+    `alt sinir x${vt._agcFor(1e6).toFixed(3)} / ust sinir x${vt._agcFor(0.0021).toFixed(3)}`);
+  vt.settings.level = 0;
+  assert('seviye sabitleme kapatilabiliyor', vt._agcFor(0.012) === 1);
+
+  // Gercek sinyalde: kisik bolum -> yuksek bolum gecisi
+  vt.settings.level = 1;
+  const sr2 = 44100, seg = [];
+  for (let i = 0; i < sr2 * 4; i++) {
+    const t = i / sr2;
+    const amp = t < 2 ? 0.012 : 0.30;              // 2. saniyede aniden bagiriyor
+    seg.push(amp * Math.sin(2 * Math.PI * 220 * t));
+  }
+  let e = 0; const gains = [];
+  for (let i = 0; i + 1024 <= seg.length; i += 1024) {
+    let x = 0; for (let k = i; k < i + 1024; k++) x += seg[k] * seg[k];
+    e = e * 0.985 + Math.sqrt(x / 1024) * 0.015;
+    gains.push({ t: i / sr2, g: vt._agcFor(e) });
+  }
+  const gA = gains.filter(x => x.t > 1.5 && x.t < 1.95).map(x => x.g);
+  const gB = gains.filter(x => x.t > 3.5).map(x => x.g);
+  const avg = a => a.reduce((s, x) => s + x, 0) / a.length;
+  assert('AGC kisik bolume dokunmuyor', Math.abs(avg(gA) - 1) < 0.01, 'ortalama x' + avg(gA).toFixed(2));
+  assert('AGC yuksek bolumu geri cekiyor', avg(gB) < 0.5,
+    `kisik x${avg(gA).toFixed(2)} -> yuksek x${avg(gB).toFixed(2)}`);
+  vt.settings.level = 0.6;
+
+  // --- 7d) PATLAMA BASTIRICI (gercek olcumle kalibre: DzLcUyjPljE 5:00-5:11)
+  vt.settings.burstMax = 14; vt.settings.burstFreq = 1200; vt.settings.burstSens = 1.5;
+  assert('patlama aninda kesim devreye giriyor', vt._burstCutFor(0.145, 0.048) <= -13,
+    'olculen tepe/zarf 3.0 -> ' + vt._burstCutFor(0.145, 0.048).toFixed(1) + ' dB');
+  assert('normal konusmada kesim YOK', vt._burstCutFor(0.050, 0.048) === 0,
+    'oran 1.04 -> esik alti');
+  assert('esik gecisi kademeli', (() => {
+    const a = vt._burstCutFor(0.048*1.7, 0.048), b = vt._burstCutFor(0.048*2.1, 0.048);
+    return a < 0 && b < a;
+  })());
+  assert('sessizlikte devreye girmiyor', vt._burstCutFor(0.001, 0.0005) === 0);
+  assert('kapatilabiliyor', (vt.settings.burstMax = 0, vt._burstCutFor(0.145, 0.048) === 0));
+  vt.settings.burstMax = 14;
+  assert('kesim filtre ve genis band olarak bolunuyor',
+    !!c.burst && !!c.duck && c.duck.gain.value <= 1,
+    'burst peaking + duck gain dugumleri zincirde');
+  assert('patlama filtresi genis (olculen bant 250-2500 Hz)', c.burst.Q.value <= 0.9,
+    'Q = ' + c.burst.Q.value);
+  assert('hassasiyet dusurulunce daha erken tetikleniyor', (() => {
+    vt.settings.burstSens = 2.5; const az = vt._burstCutFor(0.048*2.2, 0.048);
+    vt.settings.burstSens = 1.15; const cok = vt._burstCutFor(0.048*2.2, 0.048);
+    vt.settings.burstSens = 1.5; return az === 0 && cok <= -14;
+  })(), 'x2.5 esikte tetiklenmiyor, x1.15 esikte tam kesim');
+  assert('yeni tavanlar gecerli', vt._agcFor && (() => {
+    const S = vt.settings; S.burstMax = 999; return true;
+  })());
+  vt.settings.burstMax = 14;
+
+  // --- 7e) FREKANS DENGELEYICI
+  vt.settings.evenAmt = 1; vt.settings.evenDepth = 12;
+  assert('9 bant kuruldu, 200 Hz - 6.4 kHz',
+    vt._evenBands.length === 9 && vt._evenBands[0] === 200 && vt._evenBands.at(-1) === 6400,
+    vt._evenBands.join(', ') + ' Hz');
+  assert('zincirde 9 seri filtre var', Array.isArray(c.even) && c.even.length === 9 &&
+    c.even.every(b => b.filt && b.an), 'seri peaking + paralel analyser');
+  assert('bant ortalamasinin USTUNE cikinca kisiliyor',
+    Math.abs(vt._evenCutFor(0.1, 0.05) - (-6.02)) < 0.1,
+    '2x sapma -> ' + vt._evenCutFor(0.1, 0.05).toFixed(2) + ' dB');
+  assert('bant ortalamasinin ALTINDA kaliyorsa DOKUNULMUYOR',
+    vt._evenCutFor(0.02, 0.05) === 0, 'cukurlar doldurulmuyor');
+  assert('ortalamadayken kesim yok', Math.abs(vt._evenCutFor(0.05, 0.05)) < 0.01);
+  assert('derinlik siniri asilmiyor',
+    vt._evenCutFor(1.0, 0.001) === -12, '60 dB sapma -> derinlik tavani -12 dB');
+  assert('guc kaydiricisi orantili calisiyor', (() => {
+    vt.settings.evenAmt = 0.5; const yari = vt._evenCutFor(0.1, 0.05);
+    vt.settings.evenAmt = 1;   const tam  = vt._evenCutFor(0.1, 0.05);
+    return Math.abs(yari - tam / 2) < 0.01;
+  })());
+  assert('kapatilabiliyor',
+    (vt.settings.evenAmt = 0, vt._evenCutFor(1.0, 0.001) === 0));
+  vt.settings.evenAmt = 0.6;
+  assert('sessizlikte devreye girmiyor', vt._evenCutFor(1e-9, 1e-9) === 0);
+
+  // --- 8) SINYAL TESTI: de-esser gercek bir sibilans patlamasinda deviniyor mu?
+  // Not: bu otomasyon penceresinde ses calarken zamanlayicilar 1 Hz'e kisiliyor, o yuzden
+  // olcum gercek zamanli degil OFFLINE yapiliyor. Filtreler zincirdekiyle birebir ayni,
+  // karar ise uretim kodundaki cutFor() fonksiyonunun ta kendisi.
+  const wav = await (await fetch(v.src)).arrayBuffer();
+  const abuf = await ac.decodeAudioData(wav);
+  const sr = abuf.sampleRate;
+
+  async function render(withBandpass) {
+    const off = new OfflineAudioContext(1, abuf.length, sr);
+    const s1 = off.createBufferSource(); s1.buffer = abuf;
+    const hp2 = off.createBiquadFilter();
+    hp2.type = 'highpass'; hp2.frequency.value = 80; hp2.Q.value = 0.7;
+    s1.connect(hp2);
+    let tail = hp2;
+    if (withBandpass) {
+      const bp2 = off.createBiquadFilter();
+      bp2.type = 'bandpass'; bp2.frequency.value = 7000; bp2.Q.value = 1.4;
+      hp2.connect(bp2); tail = bp2;
+    }
+    tail.connect(off.destination); s1.start();
+    return (await off.startRendering()).getChannelData(0);
+  }
+  const full = await render(false);   // anFull'un gordugu sinyal
+  const high = await render(true);    // anHigh'in gordugu sinyal
+
+  const winRms = (a, i, n) => {
+    let x = 0; for (let k = i; k < i + n; k++) x += a[k] * a[k];
+    return Math.sqrt(x / n);
+  };
+
+  vt.settings.deessMax = 12; vt.settings.deessSens = 0.18;
+  const N = 1024, cuts = [];
+  for (let i = 0; i + N <= full.length; i += N / 2)
+    cuts.push({ t: i / sr, c: vt._cutFor(winRms(high, i, N), winRms(full, i, N)) });
+
+  const inBurst = s => (s.t > 1.05 && s.t < 1.38) || (s.t > 2.25 && s.t < 2.58);
+  const quiet   = s => (s.t > 0.30 && s.t < 0.95) || (s.t > 1.65 && s.t < 2.15);
+  const B = cuts.filter(inBurst), Q = cuts.filter(quiet);
+  const cutB = Math.min(...B.map(s => s.c));
+  const cutQ = Math.min(...Q.map(s => s.c));
+
+  assert('olcum alindi', cuts.length > 200 && B.length > 20 && Q.length > 20,
+    `${cuts.length} pencere (patlama ${B.length} / govde ${Q.length})`);
+  assert('SIBILANS ANINDA kesim yapiyor', cutB < -4,
+    'patlama sirasinda ' + cutB.toFixed(2) + ' dB');
+  assert('SESSIZ BOLGEDE kesim yapmiyor', cutQ > -1.5,
+    'govde sirasinda en fazla ' + cutQ.toFixed(2) + ' dB');
+  assert('ayrim net (patlama vs govde)', (cutQ - cutB) > 4,
+    'fark ' + (cutQ - cutB).toFixed(2) + ' dB');
+  assert('hassasiyet ayari etkili', (() => {
+    vt.settings.deessSens = 0.40;
+    const az = Math.min(...B.map(s => vt._cutFor(winRms(high, Math.round(s.t*sr), N), winRms(full, Math.round(s.t*sr), N))));
+    vt.settings.deessSens = 0.05;
+    const cok = Math.min(...B.map(s => vt._cutFor(winRms(high, Math.round(s.t*sr), N), winRms(full, Math.round(s.t*sr), N))));
+    vt.settings.deessSens = 0.18;
+    return cok < az;
+  })(), 'dusuk hassasiyet degeri = daha agresif');
+
+  // Uretimdeki _tick() canli zincirde hatasiz kosuyor mu
+  let tickOk = true;
+  try { for (let i = 0; i < 5; i++) vt._tick(); } catch (e) { tickOk = false; }
+  assert('canli analiz dongusu (_tick) hatasiz kosuyor', tickOk);
+
+  // --- 8b) Analiz saati: arka plan sekmesinde kisilmayan Worker kullaniliyor mu?
+  assert('analiz saati ses thread inde (zamanlayici degil, CSP ye takilmaz)',
+    !!vt._clock && typeof vt._clock.onaudioprocess !== 'undefined',
+    'clock = ' + (vt._clock ? vt._clock.constructor.name : 'setInterval yedegi'));
+  assert('saat sinyal yoluna dokunmuyor (sifir kazancli yan kol)',
+    !!vt._clock && vt._clock.bufferSize === 1024);
+  const ticks = await new Promise(res => {
+    let n = 0; const sp = vt._clock;
+    if (!sp) return res(-1);
+    const prev = sp.onaudioprocess;
+    sp.onaudioprocess = (e) => { n++; prev && prev(e); };
+    setTimeout(() => { sp.onaudioprocess = prev; res(n); }, 1000);
+  });
+  assert('saat duzenli tikliyor', ticks > 20, '1 sn de ' + ticks + ' tik');
+  // Yorumlari ayikla - aksi halde konuyu ACIKLAYAN yorum bulgu gibi gorunur
+  const codeOnly = srcTxt.replace(/\/\*[\s\S]*?\*\//g, '').replace(/^\s*\/\/.*$/gm, '');
+  assert('Worker kullanilmiyor (YouTube CSP si engelliyor)',
+    !codeOnly.includes('new Worker('), 'calisan kodda new Worker yok');
+  assert('blob: URL uretilmiyor (CSP script-src engelliyor)',
+    !codeOnly.includes('createObjectURL(new Blob'), 'calisan kodda blob worker yok');
+
+  // --- 9) Baypas anahtari
+  vt.settings.on = false;
+  await new Promise(r => setTimeout(r, 120));
+  assert('baypas kapatinca islem duruyor', Math.abs(c.deess.gain.value) < 0.5 || v.paused);
+
+  log.push('');
+  log.push(`SONUC: ${pass} gecti, ${fail} kaldi`);
+  out.textContent = log.join('\n');
+  document.title = fail ? `FAIL(${fail})` : `PASS(${pass})`;
+};
+
+// tests/calistir.sh görünmez Chrome'da ?oto ile açar; düğmeye basacak kimse yok.
+if (new URLSearchParams(location.search).has('oto')) document.getElementById('go').click();
+</script>

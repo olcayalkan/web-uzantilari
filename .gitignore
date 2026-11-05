@@ -1,0 +1,12 @@
+# Paketler CI'da üretilir, Release'e yüklenir; depoya girmez.
+dist/
+node_modules/
+.DS_Store
+
+# Uzantı imzalama anahtarları ve ortam dosyaları asla depoya girmez.
+*.pem
+*.crx
+*.p12
+*.key
+.env
+.env.*

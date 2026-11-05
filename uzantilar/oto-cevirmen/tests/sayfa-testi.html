@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+<meta charset="UTF-8" />
+<title>BEKLİYOR</title>
+<script>
+  // content.js'in davranış testi. Gerçek eklenti API'si yok; chrome.runtime ve
+  // chrome.storage taklit edilir, kapalı shadow kök test için yakalanır.
+  const gonderilen = [];
+  let sahteYanit = (m) => ({ tamam: true, sonuc: { ceviri: "Merhaba dünya", kaynakDil: "en" } });
+  window.chrome = {
+    runtime: {
+      lastError: null,
+      sendMessage(m, cb) { gonderilen.push(m.metin); setTimeout(() => cb(sahteYanit(m)), 0); },
+      onMessage: { addListener() {} }
+    },
+    storage: {
+      sync: { get(v, cb) { cb(v); }, set() {} },
+      local: { get(k, cb) { cb({}); }, set() {}, remove() {} },
+      onChanged: { addListener() {} }
+    }
+  };
+  let kok = null;
+  const asil = Element.prototype.attachShadow;
+  Element.prototype.attachShadow = function (o) { kok = asil.call(this, o); return kok; };
+</script>
+<script src="../src/core/sabitler.js"></script>
+<script src="../src/features/ceviri/data/depolama.js"></script>
+<script src="../src/features/ceviri/domain/ceviri_motoru.js"></script>
+<script src="../src/features/ceviri/presentation/content/content.js"></script>
+</head>
+<body>
+  <p id="en">Hello world</p>
+  <p id="tr">Merhaba dünya</p>
+  <p id="sayi">123456</p>
+  <textarea id="alan">Good night</textarea>
+<script>
+  const bekle = (ms) => new Promise((r) => setTimeout(r, ms));
+  const hatalar = []; let sayac = 0;
+  const ok = (ad, k) => { sayac++; if (!k) hatalar.push(ad); };
+  const balon = () => document.querySelector("ceviri-balonu");
+  const balonMetni = () => (kok && kok.querySelector(".metin") || {}).textContent;
+
+  async function sec(id) {
+    const r = document.createRange();
+    r.selectNodeContents(document.getElementById(id));
+    const s = getSelection(); s.removeAllRanges(); s.addRange(r);
+    document.getElementById(id).dispatchEvent(new MouseEvent("mouseup", { bubbles: true, button: 0 }));
+    await bekle(30);
+  }
+
+  (async () => {
+    await sec("en");
+    ok("İngilizce seçimde balon açılır", !!balon());
+    ok("çeviri balonda", balonMetni() === "Merhaba dünya");
+    ok("dil başlığı", kok.querySelector(".dil").textContent === "İngilizce → Türkçe");
+    ok("balon seçimin altında", parseFloat(kok.querySelector(".balon").style.top) >
+      document.getElementById("en").getBoundingClientRect().bottom);
+
+    await sec("en");
+    ok("aynı seçim tekrar istek atmaz", gonderilen.length === 1);
+
+    document.body.dispatchEvent(new KeyboardEvent("keydown", { key: "Escape", bubbles: true }));
+    ok("Esc kapatır", !balon());
+
+    await sec("sayi");
+    ok("yalnız sayı için istek yok", gonderilen.length === 1 && !balon());
+
+    sahteYanit = () => ({ tamam: true, sonuc: { ceviri: "Merhaba dünya", kaynakDil: "tr" } });
+    await sec("tr");
+    ok("Türkçe metinde balon kapanır", !balon());
+
+    sahteYanit = () => ({ tamam: false, hata: "Çok fazla istek" });
+    await sec("en");
+    ok("hata balonda gösterilir", balonMetni() === "Çok fazla istek" && kok.querySelector(".metin.hata"));
+
+    sahteYanit = () => ({ tamam: true, sonuc: { ceviri: "İyi geceler", kaynakDil: "en" } });
+    document.body.dispatchEvent(new MouseEvent("mousedown", { bubbles: true }));
+    ok("dışarı tıklama kapatır", !balon());
+    const alan = document.getElementById("alan");
+    alan.focus(); alan.setSelectionRange(0, alan.value.length);
+    alan.dispatchEvent(new MouseEvent("mouseup", { bubbles: true, button: 0 }));
+    await bekle(30);
+    ok("textarea seçimi çevrilir", gonderilen.at(-1) === "Good night" && balonMetni() === "İyi geceler");
+
+    ok("sayfada tek eleman", document.querySelectorAll("ceviri-balonu").length === 1);
+    document.title = hatalar.length ? "KALDI: " + hatalar.join(" | ") : "GEÇTİ (" + sayac + " kontrol)";
+  })().catch((h) => { document.title = "KALDI: istisna " + h.message; });
+</script>
+</body>
+</html>

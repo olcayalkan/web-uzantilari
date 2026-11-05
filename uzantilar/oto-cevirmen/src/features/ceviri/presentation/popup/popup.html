@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+  <meta charset="UTF-8" />
+  <title>Oto Çevirmen</title>
+  <link rel="stylesheet" href="popup.css" />
+</head>
+<body>
+  <header>
+    <h1>Oto Çevirmen</h1>
+    <label class="anahtar" title="Sayfada metin seçince kendiliğinden çevir">
+      <span id="durumYazi" class="durum-yazi">KAPALI</span>
+      <input type="checkbox" id="otomatik" aria-label="Seçince otomatik çevir" />
+      <span class="kaydirac"></span>
+    </label>
+  </header>
+  <p id="aciklama" class="aciklama"></p>
+
+  <textarea id="girdi" placeholder="Çevrilecek metni yaz ya da yapıştır…"></textarea>
+
+  <div id="durum" class="durum"></div>
+
+  <section id="sonuc" class="kart" hidden>
+    <div class="kart-baslik">
+      <span id="dil" class="dil"></span>
+      <button id="kopyala">Kopyala</button>
+    </div>
+    <pre id="cikti" class="cikti"></pre>
+  </section>
+
+  <p class="ipucu">Kısayol: <kbd>Alt</kbd>+<kbd>Shift</kbd>+<kbd>T</kbd> · sağ tık → “Türkçeye çevir”</p>
+
+  <script src="../../../../core/sabitler.js"></script>
+  <script src="../../domain/ceviri_motoru.js"></script>
+  <script src="../../data/depolama.js"></script>
+  <script src="popup.js"></script>
+</body>
+</html>

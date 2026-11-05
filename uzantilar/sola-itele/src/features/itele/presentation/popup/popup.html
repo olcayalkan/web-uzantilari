@@ -1,0 +1,27 @@
+<!doctype html>
+<html lang="tr">
+<head>
+<meta charset="utf-8">
+<link rel="stylesheet" href="popup.css">
+</head>
+<body>
+  <div class="satir">
+    <h1>Sola İtele</h1>
+    <label class="anahtar" title="Aç / kapat"><input type="checkbox" id="acik" aria-label="Sola itelemeyi aç"><span></span></label>
+  </div>
+  <div class="oran">
+    <div class="satir"><label for="oran">Kullanılan genişlik</label><output id="deger" for="oran"></output></div>
+    <input type="range" id="oran" min="30" max="95" step="5">
+    <div class="uclar"><span>%30</span><span>%95</span></div>
+    <div class="hazir">
+      <button type="button" data-oran="50">%50</button>
+      <button type="button" data-oran="60">%60</button>
+      <button type="button" data-oran="70">%70</button>
+      <button type="button" data-oran="80">%80</button>
+    </div>
+  </div>
+  <script src="../../../../core/sabitler.js"></script>
+  <script src="../../data/depolama.js"></script>
+  <script src="popup.js"></script>
+</body>
+</html>

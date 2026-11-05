@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+  <meta charset="UTF-8" />
+  <title>Oto Çözücü</title>
+  <link rel="stylesheet" href="popup.css" />
+</head>
+<body>
+  <header>
+    <div class="baslik">
+      <h1>Oto Çözücü</h1>
+      <label class="anahtar" title="Sayfada seçince otomatik çöz"><input type="checkbox" id="acik" aria-label="Sayfada seçince otomatik çözmeyi aç"><span></span></label>
+    </div>
+    <div class="mod">
+      <button id="modCoz" class="aktif">🔓 Çöz</button>
+      <button id="modKodla">🔒 Kodla</button>
+    </div>
+  </header>
+
+  <textarea id="girdi" placeholder="Metni yapıştır..."></textarea>
+
+  <div class="satir">
+    <button id="panoBtn" title="Panodaki metni al">📋 Panodan al</button>
+    <select id="yontem" hidden></select>
+  </div>
+
+  <div class="anahtar-satir" id="anahtarSatir">
+    <input id="anahtar" type="text" placeholder="Anahtar / parametre (opsiyonel)" />
+  </div>
+
+  <div id="durum" class="durum"></div>
+
+  <section id="sonuclar"></section>
+
+  <script src="../../domain/cozucu_motoru.js"></script>
+  <script src="../../../../core/sabitler.js"></script>
+  <script src="../../data/depolama.js"></script>
+  <script src="popup.js"></script>
+</body>
+</html>

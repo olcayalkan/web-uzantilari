@@ -1,0 +1,24 @@
+:root { color-scheme: light dark; --vurgu: #2563eb; --cizgi: #d4d4d8; --soluk: #71717a; }
+@media (prefers-color-scheme: dark) { :root { --cizgi: #3f3f46; --soluk: #a1a1aa; --vurgu: #60a5fa; } }
+
+body { box-sizing: border-box; margin: 0; width: 240px; padding: 14px 16px; font: 13px/1.4 system-ui, sans-serif; }
+.satir { display: flex; align-items: center; justify-content: space-between; gap: 8px; }
+h1 { margin: 0; font-size: 14px; font-weight: 600; }
+
+/* Aç / kapat anahtarı */
+label.anahtar { position: relative; width: 34px; height: 20px; flex: none; }
+label.anahtar input { position: absolute; opacity: 0; inset: 0; margin: 0; cursor: pointer; }
+label.anahtar span { position: absolute; inset: 0; border-radius: 10px; background: var(--cizgi); transition: background .15s; pointer-events: none; }
+label.anahtar span::after { content: ''; position: absolute; top: 2px; left: 2px; width: 16px; height: 16px; border-radius: 50%; background: #fff; transition: transform .15s; }
+label.anahtar input:checked + span { background: var(--vurgu); }
+label.anahtar input:checked + span::after { transform: translateX(14px); }
+label.anahtar input:focus-visible + span { outline: 2px solid var(--vurgu); outline-offset: 2px; }
+
+/* Oran kaydırıcısı ve hazır değerler */
+.oran { margin-top: 14px; }
+.oran output { font-variant-numeric: tabular-nums; font-weight: 600; }
+input[type=range] { width: 100%; margin: 8px 0 2px; accent-color: var(--vurgu); }
+.uclar { display: flex; justify-content: space-between; color: var(--soluk); font-size: 11px; }
+.hazir { display: flex; gap: 6px; margin-top: 10px; }
+.hazir button { flex: 1; padding: 4px 0; border: 1px solid var(--cizgi); border-radius: 6px; background: none; color: inherit; font: inherit; cursor: pointer; }
+.hazir button[aria-pressed=true] { border-color: var(--vurgu); color: var(--vurgu); }
