@@ -64,3 +64,7 @@ scripts/paketle.sh       # dist/<ad>.zip
 
 Katman kuralı ve yeni uzantı ekleme: [docs/mimari.md](docs/mimari.md),
 [docs/gelistirme.md](docs/gelistirme.md).
+
+## Lisans
+
+[MIT](LICENSE). Kullanabilir, değiştirebilir, dağıtabilirsin; telif satırını koru.
