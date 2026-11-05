@@ -25,26 +25,26 @@ Güncelleme, kaldırma ve sık sorunlar için: [docs/kurulum.md](docs/kurulum.md
 
 ## Kurulum videoları
 
-Her uzantı için Chrome menüsünden adım adım kurulum ve ilk kullanım. Önizlemeye tıklayınca tam çözünürlüklü video açılır (23 sn).
+Her uzantı için Chrome menüsünden adım adım kurulum ve ilk kullanım. Animasyon sayfada kendiliğinden oynar; tıklayınca videosu açılır (23 sn).
 
 <table>
   <tr>
     <td align="center" width="50%">
-      <a href="docs/videolar/oto-cozucu.mp4"><img src="docs/videolar/oto-cozucu-onizleme.gif" width="100%" alt="Oto Çözücü: Chrome menüsünden kurulum ve ilk kullanım"></a>
+      <a href="docs/videolar/oto-cozucu.mp4"><img src="docs/videolar/oto-cozucu.svg" width="100%" alt="Oto Çözücü: Chrome menüsünden kurulum ve ilk kullanım"></a>
       <br><b>Oto Çözücü</b> · <a href="docs/videolar/oto-cozucu.mp4">videoyu izle</a>
     </td>
     <td align="center" width="50%">
-      <a href="docs/videolar/oto-cevirmen.mp4"><img src="docs/videolar/oto-cevirmen-onizleme.gif" width="100%" alt="Oto Çevirmen: Chrome menüsünden kurulum ve ilk kullanım"></a>
+      <a href="docs/videolar/oto-cevirmen.mp4"><img src="docs/videolar/oto-cevirmen.svg" width="100%" alt="Oto Çevirmen: Chrome menüsünden kurulum ve ilk kullanım"></a>
       <br><b>Oto Çevirmen</b> · <a href="docs/videolar/oto-cevirmen.mp4">videoyu izle</a>
     </td>
   </tr>
   <tr>
     <td align="center" width="50%">
-      <a href="docs/videolar/sola-itele.mp4"><img src="docs/videolar/sola-itele-onizleme.gif" width="100%" alt="Sola İtele: Chrome menüsünden kurulum ve ilk kullanım"></a>
+      <a href="docs/videolar/sola-itele.mp4"><img src="docs/videolar/sola-itele.svg" width="100%" alt="Sola İtele: Chrome menüsünden kurulum ve ilk kullanım"></a>
       <br><b>Sola İtele</b> · <a href="docs/videolar/sola-itele.mp4">videoyu izle</a>
     </td>
     <td align="center" width="50%">
-      <a href="docs/videolar/voice-tamer.mp4"><img src="docs/videolar/voice-tamer-onizleme.gif" width="100%" alt="Voice Tamer: Chrome menüsünden kurulum ve ilk kullanım"></a>
+      <a href="docs/videolar/voice-tamer.mp4"><img src="docs/videolar/voice-tamer.svg" width="100%" alt="Voice Tamer: Chrome menüsünden kurulum ve ilk kullanım"></a>
       <br><b>Voice Tamer</b> · <a href="docs/videolar/voice-tamer.mp4">videoyu izle</a>
     </td>
   </tr>
@@ -86,6 +86,7 @@ docs/                    Kurulum, mimari, geliştirme
 
 ```bash
 scripts/test.sh          # tüm testler (Chrome varsa tarayıcı testleri de)
+node scripts/tanitim/svg-yap.mjs   # README'deki kurulum animasyonları (docs/videolar/*.svg)
 scripts/gizli-tara.sh    # anahtar, token, kişisel yol taraması
 scripts/paketle.sh       # dist/<ad>.zip
 ```

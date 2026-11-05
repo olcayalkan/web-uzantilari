@@ -1,6 +1,6 @@
 # Oto Çevirmen — Seçileni Türkçeye Çeviren Chrome Uzantısı
 
-<a href="../docs/videolar/oto-cevirmen.mp4"><img src="../docs/videolar/oto-cevirmen.gif" width="960" alt="Oto Çevirmen: Chrome menüsünden kurulum ve ilk kullanım"></a>
+<a href="../docs/videolar/oto-cevirmen.mp4"><img src="../docs/videolar/oto-cevirmen.svg" width="960" alt="Oto Çevirmen: Chrome menüsünden kurulum ve ilk kullanım"></a>
 
 Sayfada bir metni seçtiğinde dili otomatik algılar ve Türkçe çevirisini seçimin
 altında küçük bir balonda gösterir. Düğmeye basmak, sağ tıklamak gerekmez.

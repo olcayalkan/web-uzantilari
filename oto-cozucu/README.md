@@ -1,6 +1,6 @@
 # Oto Çözücü — CTF Kodlama/Şifre Chrome Uzantısı
 
-<a href="../docs/videolar/oto-cozucu.mp4"><img src="../docs/videolar/oto-cozucu.gif" width="960" alt="Oto Çözücü: Chrome menüsünden kurulum ve ilk kullanım"></a>
+<a href="../docs/videolar/oto-cozucu.mp4"><img src="../docs/videolar/oto-cozucu.svg" width="960" alt="Oto Çözücü: Chrome menüsünden kurulum ve ilk kullanım"></a>
 
 Kodlanmış/şifreli metni **otomatik tanıyıp çözer** (decrypt) ve seçili yöntemle
 **kodlar** (encrypt). Önce hangi kodlama olduğunu puanlayarak tespit eder, sonra

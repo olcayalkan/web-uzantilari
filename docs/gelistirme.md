@@ -22,6 +22,20 @@ tests/calistir.sh                 # ya da: node tests/calistir.mjs (Voice Tamer)
 
 Kodu değiştirdikten sonra uzantılar sayfasında kartın ↻ düğmesine bas, sekmeyi yenile.
 
+## Kurulum animasyonları
+
+README'deki animasyonlar `scripts/tanitim/` altında üretilir. `sahne.html` her uzantının
+kurulumunu ve ilk kullanımını, uzantıların gerçek koduyla çizer.
+
+```bash
+node scripts/tanitim/svg-yap.mjs                 # docs/videolar/<ad>.svg (README'de oynayan)
+node scripts/tanitim/yakala.mjs <ad> kareler     # 30 fps kareler; MP4 için:
+ffmpeg -framerate 30 -i kareler/%04d.jpg -c:v libx264 -crf 20 -pix_fmt yuv420p docs/videolar/<ad>.mp4
+```
+
+SVG, GIF değil: GitHub GIF'lere oynat düğmesi koyar ve "hareketi azalt" açıkken durdurur;
+SVG'nin CSS animasyonu sayfa açılınca kendiliğinden oynar.
+
 ## Yeni uzantı eklemek
 
 1. Depo kökünde `<kisa-ad>/` klasörünü aç; klasör adı zip'in adı olur. İçinde
