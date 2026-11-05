@@ -1,5 +1,5 @@
-// Core — uygulama genelinde paylaşılan sabitler.
-// Depolama anahtarları popup ve service worker arasında ortak; tek yerden gelir.
+// Core katmanı: uygulama genelinde paylaşılan sabitler.
+// Popup ve service worker depolama anahtarlarını buradan alır.
 (function (global) {
   "use strict";
   const Sabitler = {

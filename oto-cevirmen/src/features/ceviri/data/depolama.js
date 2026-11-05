@@ -1,6 +1,6 @@
-// Data katmanı — chrome.storage üzerinde ince sarmalayıcı.
-// Ayar sync'te durur ki kullanıcının diğer Chrome'larına da geçsin; son seçim
-// yalnızca popup'a aktarım için, cihaza özgü olduğundan local'de.
+// Data katmanı: chrome.storage üzerinde ince sarmalayıcı.
+// Ayar sync'te durur ki kullanıcının diğer Chrome'larına da geçsin. Son seçim
+// yalnızca popup'a aktarılmak için tutulur, cihaza özgü olduğundan local'de durur.
 (function (global) {
   "use strict";
   const K = (global.Sabitler && global.Sabitler.DEPO_ANAHTAR) || { otomatik: "otomatik", secim: "sonSecim" };

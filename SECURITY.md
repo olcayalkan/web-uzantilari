@@ -2,11 +2,11 @@
 
 ## Açık bildirmek
 
-Bir uzantıda güvenlik açığı bulduysan herkese açık issue açma. GitHub'ın
-**Security → Report a vulnerability** (özel bildirim) özelliğini kullan.
+Bir uzantıda güvenlik açığı bulduysan deponun Security sekmesindeki
+"Report a vulnerability" bağlantısıyla özel olarak bildir. Herkese açık issue açma.
 
-Bildirimde şunlar olsun: hangi uzantı ve sürüm, açığı tetikleyen adımlar, beklenen
-ve gerçekleşen davranış.
+Bildirime uzantının adını ve sürümünü, açığı tetikleyen adımları, beklediğin ve
+gördüğün davranışı yaz.
 
 ## Kapsam
 

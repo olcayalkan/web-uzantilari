@@ -1,5 +1,5 @@
 // tests/test.html'i görünmez Chrome'da çalıştırır, sonucu yazdırır; başarıda 0 ile çıkar.
-// --dump-dom asenkron ses testini beklemeden döküyor; bu yüzden DevTools protokolüyle
+// --dump-dom asenkron ses testini beklemeden döktüğü için DevTools protokolüyle
 // başlık PASS/FAIL olana kadar beklenir. Bağımlılık yok: Node 22'nin yerleşik WebSocket'i.
 // Kullanım: node tests/calistir.mjs   (CHROME değişkeniyle farklı Chrome yolu verilebilir)
 import { spawn } from "node:child_process";

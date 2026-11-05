@@ -1,8 +1,8 @@
 #!/usr/bin/env bash
 # Her uzantıyı Chrome'a yüklenebilir bir zip'e paketler: dist/<klasör>.zip
 # Ad sürüm içermez ki README'deki "releases/latest/download/<ad>.zip" bağlantısı
-# her sürümde çalışsın; sürüm, Release etiketinde ve manifest.json'da durur.
-# Yalnızca çalışma anı dosyaları girer (manifest, icons, src): test ve belge girmez.
+# her sürümde çalışsın. Sürüm, Release etiketinde ve manifest.json'da durur.
+# Pakete yalnızca çalışma anı dosyaları girer (manifest, icons, src), test ve belge girmez.
 set -euo pipefail
 KOK="$(cd "$(dirname "$0")/.." && pwd)"
 DIST="$KOK/dist"

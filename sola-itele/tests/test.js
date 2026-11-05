@@ -1,4 +1,4 @@
-// Domain test paketi — `node tests/test.js`. Tarayıcı gerektirmez.
+// Domain testleri: `node tests/test.js`. Tarayıcı gerektirmez.
 // Sayfadaki gerçek davranış: `tests/calistir.sh` (görünmez Chrome).
 const M = require("../src/features/itele/domain/itele_motoru.js");
 

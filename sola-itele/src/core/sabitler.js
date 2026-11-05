@@ -1,5 +1,5 @@
-// Core — paylaşılan sabitler. Panel, içerik betiği ve arka plan aynı depo
-// anahtarlarını ve varsayılanları kullanmalı; tek yerden gelir.
+// Core katmanı: paylaşılan sabitler. Panel, içerik betiği ve arka plan aynı depo
+// anahtarlarını ve varsayılanları buradan alır.
 (function (global) {
   'use strict';
   const Sabitler = {

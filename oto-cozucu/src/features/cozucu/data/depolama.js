@@ -1,4 +1,4 @@
-// Data katmanı — chrome.storage.local üzerinde ince bir veri kaynağı sarmalayıcı.
+// Data katmanı: chrome.storage.local üzerinde ince bir veri kaynağı sarmalayıcı.
 // Sunum (popup) ve service worker doğrudan chrome.storage'a dokunmaz; buradan geçer.
 // chrome API yoksa (test/izole) sessizce boş döner, davranış değişmez.
 (function (global) {

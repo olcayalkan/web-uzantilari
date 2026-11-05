@@ -1,5 +1,5 @@
-// sahne.html'i 30 fps kare kare yakalar; kareler ffmpeg ile MP4'e çevrilir (bkz. README > Geliştirici).
-// node scripts/tanitim/yakala.mjs <uzantı> <klasör> [t1,t2,...]   — zaman listesi verilirse yalnızca o anlar (png)
+// sahne.html'i 30 fps kare kare yakalar. Kareler ffmpeg ile MP4'e çevrilir (bkz. docs/gelistirme.md).
+// node scripts/tanitim/yakala.mjs <uzantı> <klasör> [t1,t2,...]   (zaman listesi verilirse yalnızca o anlar, png)
 import { mkdirSync, writeFileSync } from "node:fs";
 import { join } from "node:path";
 import { sahneAc } from "./tarayici.mjs";

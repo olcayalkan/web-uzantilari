@@ -1,4 +1,4 @@
-// Motor test paketi — `node test.js`. Tarayıcı gerektirmez.
+// Motor testleri: `node test.js`. Tarayıcı gerektirmez.
 // Her yeni özellikten sonra çalıştır: regresyonu erken yakalar.
 
 global.self = global;

@@ -1,5 +1,5 @@
-// Data / altyapı katmanı — Web Audio grafiği. Domain'in kararlarını ses düğümlerine
-// uygular; neyin ne kadar kesileceğine kendisi karar vermez (bkz. domain/kararlar.js).
+// Data / altyapı katmanı: Web Audio grafiği. Domain'in kararlarını ses düğümlerine
+// uygular. Neyin ne kadar kesileceğine domain/kararlar.js karar verir.
 (function (global) {
   "use strict";
   const K = global.Sabitler;
@@ -25,9 +25,9 @@
       const hp = ctx.createBiquadFilter();               // gövde temizliği + hırıltı altı
       hp.type = "highpass"; hp.frequency.value = S.hpFreq; hp.Q.value = 0.7;
 
-      /* GIRTLAK MODÜLÜ - üç bileşen.
+      /* Gırtlak modülü üç bileşenli.
        * İstenen azaltmanın tamamını tek bir sabit filtreyle yapmak sesin içini boşaltır.
-       * Bu yüzden: %60'ı sürekli taban, %30'u üst formant (2x frekans), %40'ı ise
+       * Bu yüzden azaltmanın %60'ı sürekli taban, %30'u üst formant (2x frekans), %40'ı da
        * yalnızca gırtlak bandı baskın olduğunda devreye giren dinamik ek. */
       const throat = ctx.createBiquadFilter();            // taban, geniş
       throat.type = "peaking"; throat.frequency.value = S.throatFreq;
@@ -41,10 +41,10 @@
       throatDyn.type = "peaking"; throatDyn.frequency.value = S.throatFreq;
       throatDyn.Q.value = 1.6; throatDyn.gain.value = 0;
 
-      /* PATLAMA BASTIRICI. Gerçek ölçümde patlama anında 900-1500 Hz +18.5 dB,
-       * 1.5-2.5k +14.7 dB fırlıyor; 6-9 kHz ise DÜŞÜYOR. Yani olay sibilans değil,
-       * orta bantta yoğunlaşan seviye sıçraması. Sabit kesim sesi sürekli boğardı,
-       * bu yüzden yalnız sıçrama anında devreye girer. */
+      /* Patlama bastırıcı. Gerçek ölçümde patlama anında 900-1500 Hz +18.5 dB,
+       * 1.5-2.5k +14.7 dB fırlarken 6-9 kHz düşüyor. Olay orta bantta yoğunlaşan bir
+       * seviye sıçraması, sibilansla ilgisi yok. Sabit kesim sesi sürekli boğacağından
+       * bastırıcı yalnızca sıçrama anında devreye girer. */
       const burst = ctx.createBiquadFilter();
       burst.type = "peaking"; burst.frequency.value = S.burstFreq;
       burst.Q.value = 0.8; burst.gain.value = 0;      // ölçümde bant geniş çıktı
@@ -138,7 +138,7 @@
       const tTau = tCut < chain.throatDyn.gain.value ? 0.02 : 0.15;
       chain.throatDyn.gain.setTargetAtTime(tCut, ctx.currentTime, tTau);
 
-      // Patlama: zarfa GÖRE ani sıçrama -> çok hızlı in, yavaş çık
+      // Patlama: zarfa göre ani sıçrama -> çok hızlı in, yavaş çık
       const bCut = D.burstCutFor(f, env);
       const bTau = bCut < chain.burst.gain.value ? 0.003 : 0.12;
       chain.burst.gain.setTargetAtTime(bCut * (1 - K.BURST_SPLIT), ctx.currentTime, bTau);
@@ -182,10 +182,10 @@
 
     /* Analiz saati.
      * setInterval arka plan sekmesinde 1 Hz'e kısılır (music.youtube.com'da sorun olurdu).
-     * Worker çözüm DEĞİL: content script'ten new Worker() sayfanın CSP'sine tabi tutuluyor,
-     * YouTube hem chrome-extension: hem blob: worker'ı bloklar.
-     * Doğru araç ses thread'i: ScriptProcessor'ın onaudioprocess olayı bir zamanlayıcı
-     * değildir, ses saatiyle sürülür ve sekme arka plandayken de akmaya devam eder.
+     * Worker da kullanılamıyor: content script'ten açılan new Worker() sayfanın CSP'sine
+     * tabi ve YouTube hem chrome-extension: hem blob: worker'ı bloklar.
+     * Saat bu yüzden ses thread'inde: ScriptProcessor'ın onaudioprocess olayını ses saati
+     * sürer, sekme arka plandayken de akmaya devam eder.
      * Sıfır kazançlı bir yan kolda durur, sinyal yoluna dokunmaz. */
     function startClock(fn) {
       try {

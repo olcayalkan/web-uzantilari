@@ -1,4 +1,4 @@
-// Domain — sayfanın sola itilmesinin saf hesabı. DOM ve chrome API'si bilmez;
+// Domain katmanı: sayfayı sola itmenin saf hesabı. DOM ve chrome API'si bilmez,
 // ölçülmüş kutuları alır, uygulanacak CSS değerlerini döndürür. Node ile test edilir.
 (function (global) {
   'use strict';

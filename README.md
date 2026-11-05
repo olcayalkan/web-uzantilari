@@ -1,15 +1,14 @@
 # Web Uzantıları
 
 Chrome, Brave ve Edge için dört küçük tarayıcı uzantısı. Hesap, kayıt ya da API
-anahtarı gerektirmezler; üçü hiç ağa çıkmaz.
-
+anahtarı istemezler. Oto Çevirmen dışındakiler ağa hiç bağlanmaz.
 
 | Uzantı | Ne yapar | Çalıştığı yer | Ağ | İndir |
 |---|---|---|---|---|
-| **[Oto Çözücü](oto-cozucu/)** | Kodlanmış ya da şifreli metni tanıyıp çözer, istersen kodlar: Base64, Hex, Morse, Vigenère, JWT, hash tanıma ve 30+ yöntem. | Tüm siteler | Yok | [oto-cozucu.zip](https://github.com/olcayalkan/web-uzantilari/releases/latest/download/oto-cozucu.zip) |
-| **[Oto Çevirmen](oto-cevirmen/)** | Sayfada seçtiğin metni Türkçeye çevirip seçimin altında küçük bir balonda gösterir. | Tüm siteler | Google Translate | [oto-cevirmen.zip](https://github.com/olcayalkan/web-uzantilari/releases/latest/download/oto-cevirmen.zip) |
-| **[Sola İtele](sola-itele/)** | Sayfanın içeriğini ekranın soluna iter, genişliği ayarlanabilir orana (varsayılan %70) sınırlar. | Tüm siteler | Yok | [sola-itele.zip](https://github.com/olcayalkan/web-uzantilari/releases/latest/download/sola-itele.zip) |
-| **[Voice Tamer](voice-tamer/)** | YouTube seslerinde tiz, sibilans, gırtlak tınısı ve ani ses patlamalarını yumuşatır. | Yalnızca YouTube | Yok | [voice-tamer.zip](https://github.com/olcayalkan/web-uzantilari/releases/latest/download/voice-tamer.zip) |
+| [Oto Çözücü](oto-cozucu/) | Kodlanmış ya da şifreli metni tanıyıp çözer, istersen kodlar: Base64, Hex, Morse, Vigenère, JWT, hash tanıma ve 30+ yöntem. | Tüm siteler | Yok | [oto-cozucu.zip](https://github.com/olcayalkan/web-uzantilari/releases/latest/download/oto-cozucu.zip) |
+| [Oto Çevirmen](oto-cevirmen/) | Sayfada seçtiğin metni Türkçeye çevirip seçimin altında küçük bir balonda gösterir. | Tüm siteler | Google Translate | [oto-cevirmen.zip](https://github.com/olcayalkan/web-uzantilari/releases/latest/download/oto-cevirmen.zip) |
+| [Sola İtele](sola-itele/) | Sayfanın içeriğini ekranın soluna iter, genişliği ayarlanabilir orana (varsayılan %70) sınırlar. | Tüm siteler | Yok | [sola-itele.zip](https://github.com/olcayalkan/web-uzantilari/releases/latest/download/sola-itele.zip) |
+| [Voice Tamer](voice-tamer/) | YouTube seslerinde tiz, sibilans, gırtlak tınısı ve ani ses patlamalarını yumuşatır. | Yalnızca YouTube | Yok | [voice-tamer.zip](https://github.com/olcayalkan/web-uzantilari/releases/latest/download/voice-tamer.zip) |
 
 ## Kurulum
 
@@ -21,11 +20,13 @@ anahtarı gerektirmezler; üçü hiç ağa çıkmaz.
    (içinde `manifest.json` olan klasör).
 5. Uzantı yüklenmeden önce açık olan sekmeleri bir kez yenile.
 
+Uzantılar Chrome Web Mağazası'nda yayımlanmadığı için geliştirici modu gerekiyor.
 Güncelleme, kaldırma ve sık sorunlar için: [docs/kurulum.md](docs/kurulum.md).
 
 ## Kurulum videoları
 
-Her uzantı için Chrome menüsünden adım adım kurulum ve ilk kullanım. Animasyon sayfada kendiliğinden oynar; tıklayınca videosu açılır (23 sn).
+Her video bir uzantının Chrome menüsünden kurulmasını ve ilk kullanımını gösteriyor (23 sn).
+Animasyon sayfada kendiliğinden oynar, üzerine tıklayınca MP4 açılır.
 
 <table>
   <tr>
@@ -50,8 +51,6 @@ Her uzantı için Chrome menüsünden adım adım kurulum ve ilk kullanım. Anim
   </tr>
 </table>
 
-> Uzantılar Chrome Web Mağazası'nda değil; bu yüzden geliştirici modu gerekiyor.
-
 ## Gizlilik ve izinler
 
 | Uzantı | İzinler | Veri nereye gider |
@@ -61,7 +60,7 @@ Her uzantı için Chrome menüsünden adım adım kurulum ve ilk kullanım. Anim
 | Sola İtele | `storage` | Hiçbir yere. Sayfa içeriğini okumaz. |
 | Voice Tamer | Yok | Hiçbir yere. Ayarlar YouTube'un yerel deposunda durur. |
 
-Kod açık; her uzantının klasöründe ne yaptığı ve neden o izni istediği yazıyor.
+Kaynak kodun tamamı bu depoda. Her uzantının ayrıntıları kendi klasöründeki README dosyasında.
 
 ## Geliştirici
 
@@ -96,4 +95,4 @@ Katman kuralı ve yeni uzantı ekleme: [docs/mimari.md](docs/mimari.md),
 
 ## Lisans
 
-[MIT](LICENSE). Kullanabilir, değiştirebilir, dağıtabilirsin; telif satırını koru.
+[MIT](LICENSE). Kodu dağıtırken telif satırını ve lisans metnini kopyaya ekle.

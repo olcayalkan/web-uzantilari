@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 # Depoya girmemesi gereken bilgileri arar: API anahtarı, token, özel anahtar,
 # kişisel dosya yolu ve e-posta, uzantı imzalama dosyaları. Bulursa 1 ile çıkar.
-# CI her push'ta çalıştırır; commit'ten önce elle de çalıştırılabilir.
+# CI her push'ta çalıştırır, commit'ten önce elle de çalıştırılabilir.
 set -euo pipefail
 KOK="$(cd "$(dirname "$0")/.." && pwd)"
 cd "$KOK"

@@ -1,11 +1,11 @@
-// Data katmanı — ağ çağrısı ve önbellek. Yalnızca service worker'da yüklenir:
+// Data katmanı: ağ çağrısı ve önbellek. Yalnızca service worker'da yüklenir:
 // content script'ten fetch, sayfanın CSP'si ve CORS'u yüzünden çoğu sitede düşer.
 (function (global) {
   "use strict";
   const S = global.Sabitler;
   const M = global.CeviriMotoru;
 
-  // Aynı kelimeyi tekrar tekrar seçmek sık; her seferinde ağa gitmeye gerek yok.
+  // Aynı kelime sık sık yeniden seçilir, her seferinde ağa gitmeye gerek yok.
   // Map ekleme sırasını koruduğu için en eskiyi atmak yeterli bir LRU yaklaşımı.
   const onbellek = new Map();
 

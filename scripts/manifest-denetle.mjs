@@ -1,6 +1,6 @@
 // Her uzantının manifest'inde ve HTML'lerinde adı geçen dosyaların gerçekten var
-// olduğunu denetler. Yol hatası Chrome'da ancak yükleme anında fark edilir; burada
-// CI'da yakalanır. Ayrıca paket dışında kalan (src/, icons/ dışı) yolu reddeder.
+// olduğunu denetler. Chrome yol hatasını ancak yükleme anında fark eder, bu betik
+// onu CI'da yakalar. Ayrıca paket dışında kalan (src/, icons/ dışı) yolu reddeder.
 import { readFileSync, existsSync, readdirSync } from "node:fs";
 import { join, dirname, normalize } from "node:path";
 import { fileURLToPath } from "node:url";

@@ -53,19 +53,19 @@ document.getElementById('go').onclick = async () => {
   document.getElementById('go').disabled = true;
   out.textContent = 'calisiyor…';
 
-  // --- 1) Dusmanca localStorage: sinir asimi + prototype pollution denemesi
+  // --- 1) Düşmanca localStorage: sınır aşımı + prototype pollution denemesi
   localStorage.setItem('voiceTamer.settings.v1', JSON.stringify({
     output: 9999, deessMax: -500, deessFreq: 'abc', comp: 1e9,
     '__proto__': { polluted: true }, evilKey: 'x'
   }));
   localStorage.setItem('voiceTamer.hidden', '0');
 
-  // --- 2) Sentetik sesi video elementine bagla
+  // --- 2) Sentetik sesi video elementine bağla
   const v = document.getElementById('v');
   v.src = URL.createObjectURL(makeWav());
   await new Promise(r => { v.oncanplaythrough = r; v.load(); });
 
-  // --- 3) Gercek content script'leri yukle (sadece domain kilidi test icin devre disi)
+  // --- 3) Gerçek content script'leri yükle (yalnızca domain kilidi test için devre dışı)
   // Dosyalar manifest'teki sırayla birleştirilir: eklentinin yüklediği kodun aynısı.
   // Köprü chrome.runtime ister, eklenti dışında çalışmaz; testin konusu da değil.
   const manifest = await (await fetch('../manifest.json')).json();
@@ -87,7 +87,7 @@ document.getElementById('go').onclick = async () => {
   assert('content script hatasiz calisti', !!vt);
   if (!vt) { out.textContent = log.join('\n'); return; }
 
-  // --- 4) Guvenlik dogrulamalari
+  // --- 4) Güvenlik doğrulamaları
   assert('prototype pollution engellendi', ({}).polluted === undefined);
   assert('output ust sinira kirpildi', vt.settings.output === 3, 'istek 9999 -> ' + vt.settings.output);
   assert('deessMax alt sinira kirpildi', vt.settings.deessMax === 0, 'istek -500 -> ' + vt.settings.deessMax);
@@ -95,7 +95,7 @@ document.getElementById('go').onclick = async () => {
   assert('comp ust sinira kirpildi', vt.settings.comp === 1, 'istek 1e9 -> ' + vt.settings.comp);
   assert('bilinmeyen anahtar alinmadi', !('evilKey' in vt.settings));
 
-  // --- 5) Panel gercekten olustu mu (DOMParser + closed shadow DOM)
+  // --- 5) Panel gerçekten oluştu mu (DOMParser + closed shadow DOM)
   const hosts = [...document.documentElement.children].filter(
     el => el.tagName === 'DIV' && el.style.zIndex === '2147483647');
   assert('panel host elementi eklendi', hosts.length === 1);
@@ -112,12 +112,12 @@ document.getElementById('go').onclick = async () => {
   assert('ses zinciri video elementine baglandi', !!c && c.el === v);
   if (!c) { out.textContent = log.join('\n'); return; }
 
-  // Testte hoparlore ses gitmesin: son halkayi sifir kazanca yonlendir
+  // Testte hoparlöre ses gitmesin: son halkayı sıfır kazanca yönlendir
   const ac = c.lim.context;
   const mute = ac.createGain(); mute.gain.value = 0;
   c.lim.disconnect(); c.lim.connect(mute); mute.connect(ac.destination);
 
-  // --- 7) Filtre tepkileri (DSP dogrulamasi)
+  // --- 7) Filtre tepkileri (DSP doğrulaması)
   vt.settings.deessMax = 12; vt.settings.harshCut = 6; vt.settings.deessSens = 0.18;
   c.harsh.gain.value = -6;
   const f = new Float32Array([100, 3200, 12000]);
@@ -141,7 +141,7 @@ document.getElementById('go').onclick = async () => {
   assert('highpass ayardan geliyor', c.hp.type === 'highpass' && c.hp.frequency.value === vt.settings.hpFreq,
     c.hp.frequency.value + ' Hz');
 
-  // --- 7b) GIRTLAK MODULU
+  // --- 7b) Gırtlak modülü
   vt.settings.throatAmt = 0.80; vt.settings.throatFreq = 450;
   const tdb = vt._throatDb();
   assert('%80 azaltma = -14 dB (genlikte 0.2x)', Math.abs(tdb - (-13.979)) < 0.01,
@@ -149,12 +149,12 @@ document.getElementById('go').onclick = async () => {
   assert('%50 azaltma = -6 dB', (vt.settings.throatAmt = 0.5, Math.abs(vt._throatDb() + 6.02) < 0.05));
   vt.settings.throatAmt = 0.80;
 
-  // Statik bilesenler (uretim kodundaki applySettings ile ayni oranlar)
+  // Statik bileşenler (üretim kodundaki applySettings ile aynı oranlar)
   c.throat.frequency.value = 450;  c.throat.gain.value  = 0.6 * tdb;
   c.throat2.frequency.value = 900; c.throat2.gain.value = 0.3 * tdb;
   c.throatDyn.frequency.value = 450;
 
-  // Dinamik ek: kalibrasyondan olculen oranlar (normal ~0.65, girtlakli ~0.87)
+  // Dinamik ek: kalibrasyondan ölçülen oranlar (normal ~0.65, gırtlaklı ~0.87)
   const dynGirtlak = vt._throatCutFor(0.87, 1.0);
   const dynNormal  = vt._throatCutFor(0.65, 1.0);
   assert('girtlakli seste dinamik ek devreye giriyor', dynGirtlak < -5,
@@ -169,7 +169,7 @@ document.getElementById('go').onclick = async () => {
     (vt.settings.throatAmt = 0, vt._throatCutFor(0.95, 1.0) === 0));
   vt.settings.throatAmt = 0.80;
 
-  // TOPLAM: girtlak baskin aninda 450 Hz de hedeflenen -14 dB'e ulasiliyor mu?
+  // Toplam: gırtlak baskın anında 450 Hz'de hedeflenen -14 dB'e ulaşılıyor mu?
   c.throatDyn.gain.value = dynGirtlak;
   const fT = new Float32Array([450]), mT = new Float32Array(1), pT = new Float32Array(1);
   let toplam450 = 0;
@@ -180,7 +180,7 @@ document.getElementById('go').onclick = async () => {
   assert('GIRTLAK ANINDA 450 Hz de toplam ~%80 azaltma', Math.abs(toplam450 - tdb) < 1.5,
     `${toplam450.toFixed(2)} dB (hedef ${tdb.toFixed(2)} dB)`);
 
-  // Sakin anda daha az kesiliyor -> ses icini bosaltmiyor
+  // Sakin anda daha az kesiliyor -> ses içini boşaltmıyor
   c.throatDyn.gain.value = 0;
   let sakin450 = 0;
   for (const node of [c.throat, c.throat2, c.throatDyn]) {
@@ -191,7 +191,7 @@ document.getElementById('go').onclick = async () => {
     sakin450 > toplam450 + 3 && sakin450 < -5,
     `sakin ${sakin450.toFixed(2)} dB / girtlak ${toplam450.toFixed(2)} dB`);
 
-  // Konusmanin netligi korunuyor mu (2-4 kHz anlasilabilirlik bolgesi)
+  // Konuşmanın netliği korunuyor mu (2-4 kHz anlaşılabilirlik bölgesi)
   const fC = new Float32Array([2500, 3500]), mC = new Float32Array(2), pC = new Float32Array(2);
   let net2500 = 0, net3500 = 0;
   c.throatDyn.gain.value = dynGirtlak;
@@ -204,25 +204,25 @@ document.getElementById('go').onclick = async () => {
     `2.5kHz ${net2500.toFixed(2)} dB / 3.5kHz ${net3500.toFixed(2)} dB`);
   c.throatDyn.gain.value = 0;
 
-  // --- 7c) SEVIYE SABITLEME (AGC) karar fonksiyonu
+  // --- 7c) Seviye sabitleme (AGC) karar fonksiyonu
   vt.settings.level = 1;
   const gQuiet = vt._agcFor(0.012), gLoud = vt._agcFor(0.30), gSil = vt._agcFor(0.0005);
   assert('kisik bolum YUKSELTILMIYOR (olcumde ters tepti)', gQuiet === 1,
     'kazanc x' + gQuiet.toFixed(2) + ' - AGC yalniz asagi yonlu');
   assert('bagirma kisiliyor', gLoud < 0.7, 'kazanc x' + gLoud.toFixed(2));
   assert('sessizlik yukseltilmiyor (fon gurultusu patlamasin)', gSil === 1);
-  const EPS = 1e-9;   // kayan nokta toleransi
+  const EPS = 1e-9;   // kayan nokta toleransı
   assert('kazanc sinirlari asilmiyor', vt._agcFor(1e-6) <= 1 + EPS && vt._agcFor(1e6) >= 1/3 - EPS,
     `alt sinir x${vt._agcFor(1e6).toFixed(3)} / ust sinir x${vt._agcFor(0.0021).toFixed(3)}`);
   vt.settings.level = 0;
   assert('seviye sabitleme kapatilabiliyor', vt._agcFor(0.012) === 1);
 
-  // Gercek sinyalde: kisik bolum -> yuksek bolum gecisi
+  // Gerçek sinyalde: kısık bölümden yüksek bölüme geçiş
   vt.settings.level = 1;
   const sr2 = 44100, seg = [];
   for (let i = 0; i < sr2 * 4; i++) {
     const t = i / sr2;
-    const amp = t < 2 ? 0.012 : 0.30;              // 2. saniyede aniden bagiriyor
+    const amp = t < 2 ? 0.012 : 0.30;              // 2. saniyede aniden bağırıyor
     seg.push(amp * Math.sin(2 * Math.PI * 220 * t));
   }
   let e = 0; const gains = [];
@@ -239,7 +239,7 @@ document.getElementById('go').onclick = async () => {
     `kisik x${avg(gA).toFixed(2)} -> yuksek x${avg(gB).toFixed(2)}`);
   vt.settings.level = 0.6;
 
-  // --- 7d) PATLAMA BASTIRICI (gercek olcumle kalibre: DzLcUyjPljE 5:00-5:11)
+  // --- 7d) Patlama bastırıcı (gerçek ölçümle kalibre: DzLcUyjPljE 5:00-5:11)
   vt.settings.burstMax = 14; vt.settings.burstFreq = 1200; vt.settings.burstSens = 1.5;
   assert('patlama aninda kesim devreye giriyor', vt._burstCutFor(0.145, 0.048) <= -13,
     'olculen tepe/zarf 3.0 -> ' + vt._burstCutFor(0.145, 0.048).toFixed(1) + ' dB');
@@ -267,7 +267,7 @@ document.getElementById('go').onclick = async () => {
   })());
   vt.settings.burstMax = 14;
 
-  // --- 7e) FREKANS DENGELEYICI
+  // --- 7e) Frekans dengeleyici
   vt.settings.evenAmt = 1; vt.settings.evenDepth = 12;
   assert('9 bant kuruldu, 200 Hz - 6.4 kHz',
     vt._evenBands.length === 9 && vt._evenBands[0] === 200 && vt._evenBands.at(-1) === 6400,
@@ -292,10 +292,10 @@ document.getElementById('go').onclick = async () => {
   vt.settings.evenAmt = 0.6;
   assert('sessizlikte devreye girmiyor', vt._evenCutFor(1e-9, 1e-9) === 0);
 
-  // --- 8) SINYAL TESTI: de-esser gercek bir sibilans patlamasinda deviniyor mu?
-  // Not: bu otomasyon penceresinde ses calarken zamanlayicilar 1 Hz'e kisiliyor, o yuzden
-  // olcum gercek zamanli degil OFFLINE yapiliyor. Filtreler zincirdekiyle birebir ayni,
-  // karar ise uretim kodundaki cutFor() fonksiyonunun ta kendisi.
+  // --- 8) Sinyal testi: de-esser gerçek bir sibilans patlamasında devreye giriyor mu?
+  // Otomasyon penceresinde ses çalarken zamanlayıcılar 1 Hz'e kısıldığı için ölçüm
+  // OfflineAudioContext ile yapılıyor. Filtreler zincirdekilerle birebir aynı, karar da
+  // üretim kodundaki cutFor() fonksiyonunun kendisi.
   const wav = await (await fetch(v.src)).arrayBuffer();
   const abuf = await ac.decodeAudioData(wav);
   const sr = abuf.sampleRate;
@@ -315,8 +315,8 @@ document.getElementById('go').onclick = async () => {
     tail.connect(off.destination); s1.start();
     return (await off.startRendering()).getChannelData(0);
   }
-  const full = await render(false);   // anFull'un gordugu sinyal
-  const high = await render(true);    // anHigh'in gordugu sinyal
+  const full = await render(false);   // anFull'un gördüğü sinyal
+  const high = await render(true);    // anHigh'in gördüğü sinyal
 
   const winRms = (a, i, n) => {
     let x = 0; for (let k = i; k < i + n; k++) x += a[k] * a[k];
@@ -351,12 +351,12 @@ document.getElementById('go').onclick = async () => {
     return cok < az;
   })(), 'dusuk hassasiyet degeri = daha agresif');
 
-  // Uretimdeki _tick() canli zincirde hatasiz kosuyor mu
+  // Üretimdeki _tick() canlı zincirde hatasız koşuyor mu
   let tickOk = true;
   try { for (let i = 0; i < 5; i++) vt._tick(); } catch (e) { tickOk = false; }
   assert('canli analiz dongusu (_tick) hatasiz kosuyor', tickOk);
 
-  // --- 8b) Analiz saati: arka plan sekmesinde kisilmayan Worker kullaniliyor mu?
+  // --- 8b) Analiz saati arka plan sekmesinde kısılmayan ses thread'inde mi?
   assert('analiz saati ses thread inde (zamanlayici degil, CSP ye takilmaz)',
     !!vt._clock && typeof vt._clock.onaudioprocess !== 'undefined',
     'clock = ' + (vt._clock ? vt._clock.constructor.name : 'setInterval yedegi'));
@@ -370,14 +370,14 @@ document.getElementById('go').onclick = async () => {
     setTimeout(() => { sp.onaudioprocess = prev; res(n); }, 1000);
   });
   assert('saat duzenli tikliyor', ticks > 20, '1 sn de ' + ticks + ' tik');
-  // Yorumlari ayikla - aksi halde konuyu ACIKLAYAN yorum bulgu gibi gorunur
+  // Yorumlar ayıklanır, yoksa Worker'ı anlatan yorum bulgu gibi görünür
   const codeOnly = srcTxt.replace(/\/\*[\s\S]*?\*\//g, '').replace(/^\s*\/\/.*$/gm, '');
   assert('Worker kullanilmiyor (YouTube CSP si engelliyor)',
     !codeOnly.includes('new Worker('), 'calisan kodda new Worker yok');
   assert('blob: URL uretilmiyor (CSP script-src engelliyor)',
     !codeOnly.includes('createObjectURL(new Blob'), 'calisan kodda blob worker yok');
 
-  // --- 9) Baypas anahtari
+  // --- 9) Baypas anahtarı
   vt.settings.on = false;
   await new Promise(r => setTimeout(r, 120));
   assert('baypas kapatinca islem duruyor', Math.abs(c.deess.gain.value) < 0.5 || v.paused);
@@ -388,6 +388,6 @@ document.getElementById('go').onclick = async () => {
   document.title = fail ? `FAIL(${fail})` : `PASS(${pass})`;
 };
 
-// tests/calistir.sh görünmez Chrome'da ?oto ile açar; düğmeye basacak kimse yok.
+// tests/calistir.mjs görünmez Chrome'da ?oto ile açar, düğmeye basacak kimse yok.
 if (new URLSearchParams(location.search).has('oto')) document.getElementById('go').click();
 </script>
