@@ -37,7 +37,7 @@ yeni yüklenen sayfalara girer.
 Seçilen metin çeviri için `translate.googleapis.com`'a gönderilir (Google
 Translate'in anahtarsız uç noktası). Başka hiçbir yere veri gitmez; istek yalnızca
 uzantının service worker'ından yapılır. Seçim özelliği için content script tüm
-sayfalarda (`<all_urls>`) çalışır. Hassas sayfalarda popup'tan otomatik modu kapat.
+sayfalarda (`<all_urls>`) çalışır.
 
 Bu uç nokta resmî bir API değildir: Google çok sık istekte hız sınırı (HTTP 429)
 uygular ve biçimi haber vermeden değiştirebilir. Balon böyle bir hatayı açıkça

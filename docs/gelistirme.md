@@ -66,9 +66,7 @@ yeni sürüme işaret eder.
 
 Depoda hiçbir anahtar, token, şifre, kişisel yol ya da e-posta bulunmaz.
 
-- Uzantıların hiçbiri anahtar gerektirmez. Bir gün gerekirse anahtarı koda değil,
-  kullanıcının popup'tan girdiği ve `chrome.storage.local`'da duran bir ayara koy.
-- `manifest.json`'a `key` alanı ekleme; uzantı kimliğini kişisel imzaya bağlar.
+- Uzantıların hiçbiri anahtar gerektirmez.
+- `manifest.json` dosyalarında `key` alanı yoktur.
 - `.pem` / `.crx` imzalama dosyaları `.gitignore`'da; `gizli-tara.sh` de reddeder.
-- CI her push'ta `gizli-tara.sh` çalıştırır. Repo ayarlarında **Secret scanning**
-  ve **Push protection**'ı da aç (Settings → Code security).
+- CI her push'ta `gizli-tara.sh` çalıştırır.
