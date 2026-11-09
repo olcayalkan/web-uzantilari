@@ -9,7 +9,7 @@
    * takılırdı. Şablonda dinamik veri olmadığından enjeksiyon yüzeyi de yok. */
   const TPL = `<style>
     :host{all:initial}
-    .p{font:12px/1.4 -apple-system,BlinkMacSystemFont,sans-serif;color:#e8e8ea;
+    .p{font:12px/1.4 -apple-system,BlinkMacSystemFont,system-ui,sans-serif;color:#e8e8ea;
        background:rgba(24,24,27,.94);backdrop-filter:blur(12px);border:1px solid #3f3f46;
        border-radius:10px;width:246px;box-shadow:0 8px 28px rgba(0,0,0,.5);overflow:hidden}
     .h{display:flex;align-items:center;gap:8px;padding:8px 10px;cursor:move;
@@ -31,7 +31,7 @@
     input[type=range]::-webkit-slider-thumb{-webkit-appearance:none;width:12px;height:12px;
        border-radius:50%;background:#e4e4e7;cursor:pointer}
     .pre{display:flex;gap:5px;margin-top:9px}
-    .pre button{flex:1;font:11px -apple-system,sans-serif;color:#d4d4d8;background:#3f3f46;
+    .pre button{flex:1;font:11px -apple-system,system-ui,sans-serif;color:#d4d4d8;background:#3f3f46;
        border:0;border-radius:5px;padding:5px 0;cursor:pointer}
     .pre button:hover{background:#52525b}
     .m{margin-top:8px;height:3px;background:#3f3f46;border-radius:2px;overflow:hidden}

@@ -4,8 +4,9 @@
   'use strict';
 
   // Kök daraltma. position:relative, konumlu atası olmayan absolute öğeler de
-  // daraltılmış alana göre yerleşsin diye.
-  const kokCss = (oran) => `html{width:${oran * 100}vw!important;max-width:${oran * 100}vw!important;min-width:0!important;margin:0!important;position:relative!important}`;
+  // daraltılmış alana göre yerleşsin diye. Yüzde kullanılır: vw klasik kaydırma çubuğunu
+  // da (Windows, Linux) sayar, fixedYerlesim'in sınırıyla çakışırdı.
+  const kokCss = (oran) => `html{width:${oran * 100}%!important;max-width:${oran * 100}%!important;min-width:0!important;margin:0!important;position:relative!important}`;
 
   /* position:fixed öğeler html genişliğine değil pencereye göre konumlanır; sınırı
    * taşanları sol alana sığdırır. Dokunulmayacaksa null döner.

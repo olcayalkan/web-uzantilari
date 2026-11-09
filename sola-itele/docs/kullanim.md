@@ -14,7 +14,7 @@ Ayarlar tüm sekmelere ve sitelere birlikte uygulanır. Değişiklik açık sekm
 
 ## Oranın anlamı
 
-Oran, **pencere** genişliğine göre hesaplanır. Pencere tam ekransa bu ekranın oranıyla aynıdır. Örneğin 1920px genişliğindeki pencerede %70, sayfanın 1344px kullanması demektir.
+Oran, **pencere** genişliğine göre hesaplanır; yer kaplayan kaydırma çubuğu (Windows, Linux) hesaba katılmaz. Pencere tam ekransa bu ekranın oranıyla aynıdır. Örneğin 1920px genişliğindeki pencerede %70, sayfanın 1344px kullanması demektir.
 
 ## Sayfada ne değişir
 

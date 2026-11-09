@@ -14,6 +14,13 @@
   #mutlak { position: absolute; top: 60px; right: 0; width: 100px; height: 40px; background: #fa0; } /* absolute, sağ kenar */
   main { padding: 70px 20px; }
 </style>
+<script>
+  // ?kaydirma: klasik kaydırma çubuğu taklidi. macOS'ta da Windows ve Linux'taki gibi yer kaplar.
+  const KAYDIRMA = location.search.includes('kaydirma');
+  if (KAYDIRMA) document.head.append(Object.assign(document.createElement('style'), {
+    textContent: 'html{overflow-y:scroll}html::-webkit-scrollbar{width:20px}',
+  }));
+</script>
 </head>
 <body>
 <div id="ust"></div><div id="sohbet"></div><div id="pencere"></div><div id="mutlak"></div>
@@ -34,8 +41,12 @@
   const kutu = (id) => { const r = document.getElementById(id).getBoundingClientRect(); return [Math.round(r.left), Math.round(r.right)]; };
   const olc = () => ({ html: Math.round(document.documentElement.getBoundingClientRect().width), ust: kutu('ust'), sohbet: kutu('sohbet'), pencere: kutu('pencere'), mutlak: kutu('mutlak') });
 
-  // Beklenen değerler 1000px pencere içindir.
-  const beklenen = {
+  // Beklenen değerler 1000px pencere içindir. Çubuk varsa kullanılabilir alan 980px.
+  const beklenen = KAYDIRMA ? {
+    '%70': { html: 686, ust: [0, 686], sohbet: [546, 666], pencere: [143, 543], mutlak: [586, 686] },
+    '%80': { html: 784, ust: [0, 784], sohbet: [644, 764], pencere: [192, 592], mutlak: [684, 784] },
+    'kapalı': { html: 980, ust: [0, 980], sohbet: [840, 960], pencere: [290, 690], mutlak: [880, 980] },
+  } : {
     '%70': { html: 700, ust: [0, 700], sohbet: [560, 680], pencere: [150, 550], mutlak: [600, 700] },
     '%80': { html: 800, ust: [0, 800], sohbet: [660, 780], pencere: [200, 600], mutlak: [700, 800] },
     'kapalı': { html: 1000, ust: [0, 1000], sohbet: [860, 980], pencere: [300, 700], mutlak: [900, 1000] },
@@ -54,6 +65,8 @@
     sonuc['kapalı'] = olc();
 
     if (innerWidth !== 1000) { document.title = `KALDI: pencere ${innerWidth}px, 1000px olmalı`; return; }
+    const alan = document.documentElement.clientWidth;
+    if (alan !== (KAYDIRMA ? 980 : 1000)) { document.title = `KALDI: kullanılabilir alan ${alan}px`; return; }
     const hatalar = Object.keys(beklenen)
       .filter((d) => JSON.stringify(sonuc[d]) !== JSON.stringify(beklenen[d]))
       .map((d) => `${d} beklenen ${JSON.stringify(beklenen[d])} gelen ${JSON.stringify(sonuc[d])}`);

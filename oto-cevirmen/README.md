@@ -15,7 +15,7 @@ altında küçük bir balonda gösterir. Düğmeye basmak, sağ tıklamak gerekm
   tıkla → **Seçince otomatik çevir**. Durum araç çubuğunda hep görünür: açıkken
   kırmızı simge + yeşil **AÇIK** rozeti, kapalıyken gri simge.
 - **Elle çeviri.** Popup'taki kutuya yazınca çevirir (mod kapalıyken de).
-- **Alt+Shift+T** ya da **sağ tık → "Türkçeye çevir"**: otomatik mod kapalıyken
+- **Alt+Shift+Y** (macOS'ta **Alt+Shift+T**) ya da **sağ tık → "Türkçeye çevir"**: otomatik mod kapalıyken
   de seçimi çevirir. Content script'in çalışmadığı sayfalarda (chrome://, PDF)
   sağ tık seçimi popup'a aktarır.
 

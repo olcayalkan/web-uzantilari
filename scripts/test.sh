@@ -5,13 +5,8 @@
 set -uo pipefail
 KOK="$(cd "$(dirname "$0")/.." && pwd)"
 
-if [ -z "${CHROME:-}" ]; then
-  for aday in "/Applications/Google Chrome.app/Contents/MacOS/Google Chrome" \
-              "$(command -v google-chrome || true)" "$(command -v chromium || true)"; do
-    [ -n "$aday" ] && [ -x "$aday" ] && { CHROME="$aday"; break; }
-  done
-fi
-export CHROME="${CHROME:-}"
+CHROME="$(node "$KOK/scripts/chrome-bul.mjs" || true)"
+export CHROME
 
 kalan=0
 kos() { # kos <etiket> <komut...>

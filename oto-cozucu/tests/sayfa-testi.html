@@ -1,0 +1,74 @@
+<!doctype html>
+<!-- content.js davranış testi. 1000px genişlikte açılır (tests/calistir.sh).
+     Çubuk klasik kaydırma çubuğunu taklit eder: macOS'ta da Windows ve Linux'taki gibi yer kaplar. -->
+<html lang="tr">
+<head>
+<meta charset="utf-8">
+<title>BEKLİYOR</title>
+<style>
+  html { overflow-y: scroll; }
+  html::-webkit-scrollbar { width: 40px; }
+  #sag { text-align: right; }
+</style>
+<script>
+  window.chrome = { storage: {
+    local: { get(k, cb) { cb({}); }, set() {}, remove() {} },
+    onChanged: { addListener() {} },
+  } };
+</script>
+<script src="../src/features/cozucu/domain/cozucu_motoru.js"></script>
+<script src="../src/core/sabitler.js"></script>
+<script src="../src/features/cozucu/data/depolama.js"></script>
+<script src="../src/features/cozucu/presentation/content/content.js"></script>
+</head>
+<body>
+  <p id="sol">TWVyaGFiYQ==</p>
+  <p id="sag">TWVyaGFiYQ==</p>
+  <p id="durdur">TWVyaGFiYQ==</p>
+  <p id="dokunma">TWVyaGFiYQ==</p>
+<script>
+  const bekle = (ms) => new Promise((r) => setTimeout(r, ms));
+  const hatalar = []; let sayac = 0;
+  const ok = (ad, k) => { sayac++; if (!k) hatalar.push(ad); };
+  const balon = () => document.querySelector("[data-cozucu]");
+  const kapat = () => document.body.dispatchEvent(new KeyboardEvent("keydown", { key: "Escape", bubbles: true }));
+  const isaretle = (id) => {
+    const r = document.createRange();
+    r.selectNodeContents(document.getElementById(id));
+    const s = getSelection(); s.removeAllRanges(); s.addRange(r);
+  };
+  const birak = async (id) => {
+    document.getElementById(id).dispatchEvent(new MouseEvent("mouseup", { bubbles: true, button: 0 }));
+    await bekle(30);
+  };
+  const isaretci = (tur) => document.dispatchEvent(new PointerEvent("pointerdown", { pointerType: tur, bubbles: true }));
+
+  (async () => {
+    await bekle(50);
+    if (document.documentElement.clientWidth !== innerWidth - 40) throw new Error("kaydırma çubuğu yer kaplamıyor");
+
+    isaretle("sol"); await birak("sol");
+    ok("seçimde balon açılır", balon() && balon().textContent.includes("Merhaba"));
+    kapat();
+
+    isaretle("sag"); await birak("sag");
+    ok("balon kaydırma çubuğunun altına girmez", parseFloat(balon().style.left) === document.documentElement.clientWidth - 300);
+    kapat();
+
+    document.getElementById("durdur").addEventListener("mouseup", (e) => e.stopPropagation());
+    isaretle("durdur"); await birak("durdur");
+    ok("sayfa mouseup'ı durdursa da balon açılır", !!balon());
+    kapat();
+
+    isaretci("touch"); isaretle("dokunma"); await bekle(700);
+    ok("dokunmatik seçimde balon açılır", !!balon());
+    kapat();
+
+    isaretci("mouse"); getSelection().removeAllRanges(); isaretle("sol"); await bekle(700);
+    ok("fareyle sürüklerken balon açılmaz", !balon());
+
+    document.title = hatalar.length ? "KALDI: " + hatalar.join(" | ") : "GEÇTİ (" + sayac + " kontrol)";
+  })().catch((h) => { document.title = "KALDI: istisna " + h.message; });
+</script>
+</body>
+</html>

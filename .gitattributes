@@ -1,0 +1,2 @@
+# Windows klonlarında CRLF, betiklerin shebang satırını bozar.
+*.sh text eol=lf

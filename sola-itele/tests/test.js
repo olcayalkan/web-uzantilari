@@ -10,7 +10,7 @@ function ok(ad, kosul, detay) {
 const kutu = (left, width) => ({ left, width, right: left + width });
 
 console.log("1) Kök stil");
-ok("%70 genişlik", M.kokCss(0.7).includes("width:70vw!important"), M.kokCss(0.7));
+ok("%70 genişlik", M.kokCss(0.7).includes("width:70%!important"), M.kokCss(0.7));
 
 console.log("2) Fixed öğe yerleşimi (1000px pencere, %70)");
 ok("sınır içindeki öğeye dokunulmaz", M.fixedYerlesim(kutu(10, 200), 1000, 0.7, 10) === null);

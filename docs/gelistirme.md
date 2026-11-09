@@ -3,7 +3,9 @@
 ## Gereksinim
 
 - Node 22+ (yalnızca testler için; uzantıların kendisi bağımlılıksız)
-- Tarayıcı testleri için Chrome. Yol farklıysa `CHROME=/yol/chrome scripts/test.sh`
+- Tarayıcı testleri için Chrome ya da Chromium. `scripts/chrome-bul.mjs` macOS, Linux ve Windows'taki
+  yerlerine bakar; başka bir yol için `CHROME=/yol/chrome scripts/test.sh`
+- Paketleme için `zip` (bazı Linux dağıtımlarında ayrıca kurulur)
 
 ## Komutlar
 

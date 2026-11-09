@@ -1,6 +1,6 @@
 # Web Uzantıları
 
-Chrome, Brave ve Edge için dört küçük tarayıcı uzantısı. Hesap, kayıt ya da API
+Chrome, Chromium, Brave ve Edge için dört küçük tarayıcı uzantısı. Hesap, kayıt ya da API
 anahtarı istemezler. Oto Çevirmen dışındakiler ağa hiç bağlanmaz.
 
 | Uzantı | Ne yapar | Çalıştığı yer | Ağ | İndir |

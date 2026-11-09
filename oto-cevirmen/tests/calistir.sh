@@ -4,7 +4,7 @@
 set -euo pipefail
 
 KLASOR="$(cd "$(dirname "$0")" && pwd)"
-CHROME="${CHROME:-/Applications/Google Chrome.app/Contents/MacOS/Google Chrome}"
+CHROME="${CHROME:-$(node "$KLASOR/../../scripts/chrome-bul.mjs")}"
 PROFIL="$(mktemp -d)"
 trap 'rm -rf "$PROFIL"' EXIT
 
