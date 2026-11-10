@@ -14,7 +14,7 @@ Rahatsız edici konuşmacı sesini, tonu boğmadan yumuşatır.
 
 - Araç çubuğu ikonu veya **Alt+Shift+V** → paneli aç/kapat
 - Başlıktaki yeşil anahtar → işlemeyi baypas et (A/B karşılaştırma)
-- Hazır ayarlar: **Hafif / Orta / Sert / Maks** — önce Orta'yı dene
+- Hazır ayarlar: **Hafif / Orta / Sert / Maks**
 - Turuncu çubuk de-esser'ın o an yaptığı kesimi gösterir
 
 ### Hangi kaydırıcı hangi derde
@@ -100,8 +100,6 @@ panel kurulumu, zincirin video elementine bağlanması, üç filtrenin frekans t
 (`getFrequencyResponse`), AGC'nin kısık/yüksek bölümlerdeki davranışı, Worker saatinin
 hızı ve sentetik bir sibilans patlaması karşısında de-esser'ın tepkisi.
 
-Son çalıştırma: **64 geçti / 0 kaldı**.
-
 - De-esser: sibilans anında −11.4 dB, konuşma gövdesinde 0.0 dB
 - Gırtlak modülü: gırtlak anında 450 Hz'de −14.8 dB (~%80), sakin anda −9.2 dB;
   2.5 kHz'de −0.7 dB, 3.5 kHz'de −0.4 dB (anlaşılabilirlik korunuyor)
@@ -115,7 +113,7 @@ Son çalıştırma: **64 geçti / 0 kaldı**.
 | **Maks** | **12.2 dB** | 10.9 → 7.9 | 116/525 |
 
 Rakamlar koşudan koşuya oynuyor (bant ortalaması ~70 kare üzerinden alınıyor, oynatma
-tam aynı karede başlamıyor). Sağlam olan sonuç: her iki ayar da açık farkla çalışıyor,
+tam aynı karede başlamıyor). Her iki ayar da açık farkla çalışıyor,
 Maks bandı en çok kısan, Orta ise dinamik farkı en çok daraltan ayar. Maks'ta kompresör
 20:1'e çıktığı için bant çok kısılıyor ama genel dinamik daha az düzeliyor.
 
@@ -158,7 +156,6 @@ tests/
 döndürür. `data/ses_motoru.js` bu kararları ses düğümlerine uygular. Panel ses
 motorunu tanımaz; ayarı değiştirip `uygula` geri çağrısıyla haber verir.
 
-
 ## Frekans dengeleyici — ölçüm ve sınırları
 
 9 bantlı bir spektral leveler (200 Hz – 6.4 kHz). Her bant kendi son ortalamasını
@@ -178,7 +175,7 @@ metriği şişirmesin diye elendi). Metrik: bant seviyesinin standart sapması.
 doldurmak kendi modülasyonunu ekliyor ve düzeltme gecikmeli geldiği için toplam
 sapmayı artırıyor.
 
-**Dürüst sınır:** 6.84 dB'lik dalgalanmanın ancak 0.56 dB'si alınabiliyor (~%8).
+**Sınır:** 6.84 dB'lik dalgalanmanın ancak 0.56 dB'si alınabiliyor (~%8).
 Sebebi şu: bu dalgalanmanın büyük kısmı konuşmanın kendisi. Farklı ünlü ve ünsüzlerin
 spektrumu doğal olarak birbirinden çok farklı ve bu fark anlam taşıyor. 3 saniyelik
 hafızası olan bir dengeleyici, "rahatsız edici oynama" ile "normal fonem değişimi"

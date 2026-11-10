@@ -3,7 +3,9 @@
 ## Gereksinim
 
 - Node 22+ (yalnızca testler için; uzantıların kendisi bağımlılıksız)
-- Tarayıcı testleri için Chrome. Yol farklıysa `CHROME=/yol/chrome scripts/test.sh`
+- Tarayıcı testleri için Chrome ya da Chromium. `scripts/chrome-bul.mjs` macOS, Linux ve Windows'taki
+  yerlerine bakar; başka bir yol için `CHROME=/yol/chrome scripts/test.sh`
+- Paketleme için `zip` (bazı Linux dağıtımlarında ayrıca kurulur)
 
 ## Komutlar
 
@@ -66,9 +68,7 @@ yeni sürüme işaret eder.
 
 Depoda hiçbir anahtar, token, şifre, kişisel yol ya da e-posta bulunmaz.
 
-- Uzantıların hiçbiri anahtar gerektirmez. Bir gün gerekirse anahtarı koda değil,
-  kullanıcının popup'tan girdiği ve `chrome.storage.local`'da duran bir ayara koy.
-- `manifest.json`'a `key` alanı ekleme; uzantı kimliğini kişisel imzaya bağlar.
+- Uzantıların hiçbiri anahtar gerektirmez.
+- `manifest.json` dosyalarında `key` alanı yoktur.
 - `.pem` / `.crx` imzalama dosyaları `.gitignore`'da; `gizli-tara.sh` de reddeder.
-- CI her push'ta `gizli-tara.sh` çalıştırır. Repo ayarlarında **Secret scanning**
-  ve **Push protection**'ı da aç (Settings → Code security).
+- CI her push'ta `gizli-tara.sh` çalıştırır.

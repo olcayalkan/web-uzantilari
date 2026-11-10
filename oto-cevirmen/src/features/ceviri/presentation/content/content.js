@@ -54,14 +54,21 @@
     istekNo++;
   }
 
+  // innerWidth klasik kaydırma çubuğunu da (Windows, Linux) sayar; balon çubuğun altına girmesin.
+  function gorunurAlan() {
+    const k = (document.compatMode === "BackCompat" && document.body) || document.documentElement;
+    return { gen: k.clientWidth || window.innerWidth, yuk: k.clientHeight || window.innerHeight };
+  }
+
   // Balonu seçimin altına koy; ekran altına taşarsa üstüne al.
   function konumla(balon, kutu) {
-    const gen = Math.min(360, window.innerWidth - 16);
-    const x = Math.max(8, Math.min(kutu.left, window.innerWidth - gen - 8));
+    const alan = gorunurAlan();
+    const gen = Math.min(360, alan.gen - 16);
+    const x = Math.max(8, Math.min(kutu.left, alan.gen - gen - 8));
     balon.style.left = x + "px";
     balon.style.top = (kutu.bottom + 8) + "px";
     const yuk = balon.getBoundingClientRect().height;
-    if (kutu.bottom + 8 + yuk > window.innerHeight && kutu.top - 8 - yuk > 0) {
+    if (kutu.bottom + 8 + yuk > alan.yuk && kutu.top - 8 - yuk > 0) {
       balon.style.top = (kutu.top - 8 - yuk) + "px";
     }
   }
@@ -154,18 +161,31 @@
     });
   }
 
+  function secimiCevir() {
+    const s = secimiAl();
+    if (!s || !s.metin.trim()) return;
+    cevir(s.metin, s.kutu, false);
+  }
+
+  // Yakalama aşamasında dinlenir: sayfa olayı durdursa da seçim kaçmaz.
   document.addEventListener("mouseup", (e) => {
     if (!otomatik || e.button !== 0) return;
     if (konak && e.composedPath().includes(konak)) return; // balonun içinde seçim/tıklama
     // Tıklama seçimi hemen güncellemiyor, bir tur bekle.
-    setTimeout(() => {
-      const s = secimiAl();
-      if (!s || !s.metin.trim()) return;
-      cevir(s.metin, s.kutu, false);
-    }, 0);
+    setTimeout(secimiCevir, 0);
+  }, true);
+
+  // Dokunmatik ekranda seçim mouseup üretmez; tutamaçlar durulunca çevrilir.
+  let sonIsaretci = "mouse";
+  let dokunmaZamani = 0;
+  document.addEventListener("pointerdown", (e) => { sonIsaretci = e.pointerType; }, true);
+  document.addEventListener("selectionchange", () => {
+    if (!otomatik || sonIsaretci !== "touch") return;
+    clearTimeout(dokunmaZamani);
+    dokunmaZamani = setTimeout(secimiCevir, S.DOKUNMA_GECIKMESI);
   });
 
-  // Sağ tık menüsü / Alt+Shift+T: otomatik mod kapalı olsa da çevir.
+  // Sağ tık menüsü / klavye kısayolu: otomatik mod kapalı olsa da çevir.
   chrome.runtime.onMessage.addListener((mesaj, _gonderen, yanitla) => {
     if (!mesaj || mesaj.tur !== S.MESAJ.kisayol) return;
     // Yanıtsız kalırsa SW "content script yok" sanıp popup'a düşer.

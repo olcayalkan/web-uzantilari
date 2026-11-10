@@ -1,5 +1,4 @@
 // Motor testleri: `node test.js`. Tarayıcı gerektirmez.
-// Her yeni özellikten sonra çalıştır: regresyonu erken yakalar.
 
 global.self = global;
 global.atob = (s) => Buffer.from(s, "base64").toString("binary");

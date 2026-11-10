@@ -5,13 +5,8 @@
 set -uo pipefail
 KOK="$(cd "$(dirname "$0")/.." && pwd)"
 
-if [ -z "${CHROME:-}" ]; then
-  for aday in "/Applications/Google Chrome.app/Contents/MacOS/Google Chrome" \
-              "$(command -v google-chrome || true)" "$(command -v chromium || true)"; do
-    [ -n "$aday" ] && [ -x "$aday" ] && { CHROME="$aday"; break; }
-  done
-fi
-export CHROME="${CHROME:-}"
+CHROME="$(node "$KOK/scripts/chrome-bul.mjs" || true)"
+export CHROME
 
 kalan=0
 kos() { # kos <etiket> <komut...>
@@ -22,6 +17,8 @@ kos() { # kos <etiket> <komut...>
 
 echo "manifest"
 kos "yollar" node "$KOK/scripts/manifest-denetle.mjs"
+echo "kurulum"
+kos "dosyalar" bash "$KOK/kurulum/test.sh"
 
 for klasor in "$KOK"/*/; do
   [ -f "$klasor/manifest.json" ] || continue  # scripts/, docs/ uzantı değil
@@ -36,4 +33,9 @@ for klasor in "$KOK"/*/; do
     echo "  - tarayıcı testi atlandı (Chrome bulunamadı)"
   fi
 done
+echo "firefox"
+GECICI="$(mktemp -d)"
+DIST="$GECICI" bash "$KOK/scripts/paketle.sh" >/dev/null
+kos "paketler" node "$KOK/scripts/firefox-test.mjs" "$GECICI"
+rm -rf "$GECICI"
 exit $kalan

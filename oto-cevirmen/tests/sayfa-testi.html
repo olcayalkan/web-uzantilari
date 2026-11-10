@@ -3,6 +3,12 @@
 <head>
 <meta charset="UTF-8" />
 <title>BEKLİYOR</title>
+<style>
+  /* Klasik kaydırma çubuğu taklidi: macOS'ta da Windows ve Linux'taki gibi yer kaplar. */
+  html { overflow-y: scroll; }
+  html::-webkit-scrollbar { width: 40px; }
+  #sag { text-align: right; }
+</style>
 <script>
   // content.js'in davranış testi. Gerçek eklenti API'si olmadığından chrome.runtime ve
   // chrome.storage taklit edilir, kapalı shadow kök test için yakalanır.
@@ -34,6 +40,9 @@
   <p id="tr">Merhaba dünya</p>
   <p id="sayi">123456</p>
   <textarea id="alan">Good night</textarea>
+  <p id="sag">Hello there</p>
+  <p id="durdur">Good morning</p>
+  <p id="dokunma">Good evening</p>
 <script>
   const bekle = (ms) => new Promise((r) => setTimeout(r, ms));
   const hatalar = []; let sayac = 0;
@@ -83,6 +92,34 @@
     await bekle(30);
     ok("textarea seçimi çevrilir", gonderilen.at(-1) === "Good night" && balonMetni() === "İyi geceler");
 
+    alan.blur();
+    sahteYanit = () => ({ tamam: true, sonuc: { ceviri: "Merhaba", kaynakDil: "en" } });
+    const kapat = () => document.body.dispatchEvent(new KeyboardEvent("keydown", { key: "Escape", bubbles: true }));
+    const isaretle = (id) => {
+      const r = document.createRange();
+      r.selectNodeContents(document.getElementById(id));
+      const s = getSelection(); s.removeAllRanges(); s.addRange(r);
+    };
+    const isaretci = (tur) => document.dispatchEvent(new PointerEvent("pointerdown", { pointerType: tur, bubbles: true }));
+    kapat();
+
+    await sec("sag");
+    ok("balon kaydırma çubuğunun altına girmez", parseFloat(kok.querySelector(".balon").style.left) === document.documentElement.clientWidth - 368);
+    kapat();
+
+    document.getElementById("durdur").addEventListener("mouseup", (e) => e.stopPropagation());
+    await sec("durdur");
+    ok("sayfa mouseup'ı durdursa da balon açılır", !!balon());
+    kapat();
+
+    isaretci("touch"); isaretle("dokunma"); await bekle(700);
+    ok("dokunmatik seçimde balon açılır", !!balon());
+    kapat();
+
+    isaretci("mouse"); getSelection().removeAllRanges(); isaretle("en"); await bekle(700);
+    ok("fareyle sürüklerken balon açılmaz", !balon());
+
+    await sec("en");
     ok("sayfada tek eleman", document.querySelectorAll("ceviri-balonu").length === 1);
     document.title = hatalar.length ? "KALDI: " + hatalar.join(" | ") : "GEÇTİ (" + sayac + " kontrol)";
   })().catch((h) => { document.title = "KALDI: istisna " + h.message; });

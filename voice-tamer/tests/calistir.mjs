@@ -8,9 +8,10 @@ import { mkdtempSync, readFileSync, rmSync, existsSync } from "node:fs";
 import { join, extname, normalize } from "node:path";
 import { tmpdir } from "node:os";
 import { fileURLToPath } from "node:url";
+import { chromeBul } from "../../scripts/chrome-bul.mjs";
 
 const KOK = fileURLToPath(new URL("..", import.meta.url));
-const CHROME = process.env.CHROME || "/Applications/Google Chrome.app/Contents/MacOS/Google Chrome";
+const CHROME = chromeBul();
 const TUR = { ".html": "text/html", ".js": "text/javascript", ".json": "application/json", ".png": "image/png" };
 const bekle = (ms) => new Promise((r) => setTimeout(r, ms));
 

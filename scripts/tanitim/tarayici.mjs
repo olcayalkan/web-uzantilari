@@ -6,10 +6,11 @@ import { mkdtempSync, readFileSync, existsSync, rmSync } from "node:fs";
 import { join, extname, normalize } from "node:path";
 import { tmpdir } from "node:os";
 import { fileURLToPath } from "node:url";
+import { chromeBul } from "../chrome-bul.mjs";
 
 export const KOK = fileURLToPath(new URL("../..", import.meta.url));
 const TUR = { ".html": "text/html", ".js": "text/javascript", ".json": "application/json", ".css": "text/css", ".png": "image/png", ".svg": "image/svg+xml" };
-const CHROME = process.env.CHROME || "/Applications/Google Chrome.app/Contents/MacOS/Google Chrome";
+const CHROME = chromeBul();
 export const bekle = (ms) => new Promise((r) => setTimeout(r, ms));
 
 export async function sahneAc(uzanti, adres = `/scripts/tanitim/sahne.html?u=${uzanti}`) {

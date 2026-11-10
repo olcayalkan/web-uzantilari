@@ -25,8 +25,10 @@
     balon.setAttribute("data-cozucu", "1");
     // Inline stil: sayfa CSS'inden etkilenmemek için hepsi !important.
     const s = balon.style;
+    // innerWidth klasik kaydırma çubuğunu da (Windows, Linux) sayar; balon çubuğun altına girmesin.
+    const kok = (document.compatMode === "BackCompat" && document.body) || document.documentElement;
     const k = {
-      position: "fixed", left: Math.min(x, window.innerWidth - 300) + "px", top: (y + 12) + "px",
+      position: "fixed", left: Math.max(8, Math.min(x, (kok.clientWidth || window.innerWidth) - 300)) + "px", top: (y + 12) + "px",
       "z-index": "2147483647", "max-width": "280px", background: "#282a36", color: "#e4e4ef",
       border: "1px solid #8be9fd", "border-radius": "8px", padding: "8px 10px",
       font: "12px/1.45 -apple-system,Segoe UI,system-ui,sans-serif", "box-shadow": "0 4px 16px rgba(0,0,0,.4)",
@@ -58,24 +60,37 @@
     document.body.appendChild(balon);
   }
 
+  function secimiCoz() {
+    const sel = window.getSelection();
+    const metin = sel ? sel.toString().trim() : "";
+    if (metin.length < 3 || metin.length > 4096) { balonuKapat(); return; }
+    if (!window.Cozucu) { balonuKapat(); return; }
+
+    const liste = window.Cozucu.coz(metin);
+    // Yalnızca güvenilir çözüm göster: yapısal yöntem ya da yüksek okunabilirlik.
+    const iyi = liste.find((r) => r.puan >= 0.55 || /Base|Hex|URL|JWT|Morse|Unicode|Binary/.test(r.yontem));
+    if (!iyi) { balonuKapat(); return; }
+
+    const rect = sel.getRangeAt(0).getBoundingClientRect();
+    balonOlustur(iyi.yontem, iyi.cikti, rect.left, rect.bottom);
+  }
+
+  // Yakalama aşamasında dinlenir: sayfa olayı durdursa da seçim kaçmaz.
   document.addEventListener("mouseup", (e) => {
     // Balonun kendi içine tıklamada kapatma.
     if (balon && balon.contains(e.target)) return;
     if (!acik) return;
-    setTimeout(() => {
-      const sel = window.getSelection();
-      const metin = sel ? sel.toString().trim() : "";
-      if (metin.length < 3 || metin.length > 4096) { balonuKapat(); return; }
-      if (!window.Cozucu) { balonuKapat(); return; }
+    setTimeout(secimiCoz, 0);
+  }, true);
 
-      const liste = window.Cozucu.coz(metin);
-      // Yalnızca güvenilir çözüm göster: yapısal yöntem ya da yüksek okunabilirlik.
-      const iyi = liste.find((r) => r.puan >= 0.55 || /Base|Hex|URL|JWT|Morse|Unicode|Binary/.test(r.yontem));
-      if (!iyi) { balonuKapat(); return; }
-
-      const rect = sel.getRangeAt(0).getBoundingClientRect();
-      balonOlustur(iyi.yontem, iyi.cikti, rect.left, rect.bottom);
-    }, 0);
+  // Dokunmatik ekranda seçim mouseup üretmez; tutamaçlar durulunca çözülür.
+  let sonIsaretci = "mouse";
+  let dokunmaZamani = 0;
+  document.addEventListener("pointerdown", (e) => { sonIsaretci = e.pointerType; }, true);
+  document.addEventListener("selectionchange", () => {
+    if (!acik || sonIsaretci !== "touch") return;
+    clearTimeout(dokunmaZamani);
+    dokunmaZamani = setTimeout(secimiCoz, 500);
   });
 
   // Dışarı tıklama / kaydırma / Esc ile kapat.

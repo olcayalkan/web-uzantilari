@@ -29,7 +29,9 @@
   };
 
   const fixedleriSigdir = () => {
-    const genislik = window.innerWidth;
+    // innerWidth klasik kaydırma çubuğunu da (Windows, Linux) sayar; ortalanmış öğe ortalı görünmezdi.
+    const kok = (document.compatMode === 'BackCompat' && document.body) || document.documentElement;
+    const genislik = kok.clientWidth || window.innerWidth;
     for (const el of document.querySelectorAll('body *')) {
       const cs = getComputedStyle(el);
       if (cs.position !== 'fixed') continue;

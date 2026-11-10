@@ -1,0 +1,5 @@
+# Windows klonlarında CRLF, betiklerin shebang satırını bozar.
+*.sh text eol=lf
+*.command text eol=lf
+# cmd.exe etiketleri LF ile bozulur; dosya CRLF olarak saklanır, git dönüştürmez.
+*.bat -text

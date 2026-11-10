@@ -13,7 +13,7 @@ Her uzantının adım adım kurulum videosu: [docs/videolar/](videolar/) ve uzan
 
    | Tarayıcı | Adres |
    |---|---|
-   | Chrome | `chrome://extensions` |
+   | Chrome, Chromium | `chrome://extensions` |
    | Brave | `brave://extensions` |
    | Edge | `edge://extensions` |
 
@@ -43,4 +43,6 @@ Uzantılar sayfasında karttaki **Kaldır** düğmesine bas, sonra klasörü sil
 | Uzantı bir sayfada çalışmıyor | Sayfa uzantı yüklenmeden önce açılmıştı, yenile. `chrome://` sayfalarında ve Web Mağazası'nda hiçbir uzantı çalışamaz. |
 | Oto Çevirmen "Çok fazla istek" diyor | Google'ın anahtarsız uç noktası hız sınırı uyguluyor. Biraz bekle. |
 | Oto Çevirmen "Uzantıya ulaşılamadı" diyor | Uzantı güncellendi, eski sekmedeki betik yetim kaldı. Sayfayı yenile. |
+| Oto Çevirmen kısayolu çalışmıyor | Kısayol Windows ve Linux'ta **Alt+Shift+Y**, macOS'ta **Alt+Shift+T**. Daha önce kurulmuş uzantıda `chrome://extensions/shortcuts` sayfasından atanır. |
+| Linux'ta klasör seçilemiyor | Snap ile kurulan Chromium gizli klasörlere erişemez. Zip, `~/Belgeler` gibi görünür bir klasöre çıkarılır. |
 | Voice Tamer paneli görünmüyor | Araç çubuğu simgesine bas ya da **Alt+Shift+V**. Yalnızca YouTube'da çalışır. |

@@ -11,8 +11,8 @@ Katmanlar içten dışa bağımlıdır; `domain` hiçbir şeye bağımlı değil
 | `src/features/itele/data/` | `chrome.storage` sarmalayıcı | Depoya yalnızca buradan erişilir |
 | `src/features/itele/presentation/` | İçerik betiği ve panel | Hesap yapmaz, domain'i çağırır |
 | `src/background/` | Service worker | Yalnızca rozet |
-| `docs/` | Belgeler | Davranış değişince ilgili belge de güncellenir |
-| `tests/` | Testler | Yeni davranış eklenince beklenen değerler de eklenir |
+| `docs/` | Belgeler | — |
+| `tests/` | Testler | — |
 
 Dosya yolu değişirse `manifest.json` (`service_worker`, `default_popup`, `content_scripts.js`), `popup.html` içindeki `<script src>` ve `tests/sayfa-testi.html` güncellenmelidir. İçerik betiklerinin sırası önemlidir: önce `core`, sonra `domain`, `data`, en son `presentation`.
 

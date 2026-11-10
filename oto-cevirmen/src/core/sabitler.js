@@ -11,6 +11,7 @@
     // URL'de 6 bayta şiştiği için parça boyu temkinli tutuldu.
     PARCA_BOYU: 1500,
     ONBELLEK_BOYU: 200,
+    DOKUNMA_GECIKMESI: 500,
     MESAJ: { cevir: "cevir", kisayol: "kisayolCevir" }
   };
   if (typeof module !== "undefined" && module.exports) module.exports = Sabitler;

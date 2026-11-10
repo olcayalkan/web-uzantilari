@@ -1,6 +1,6 @@
 # Web Uzantıları
 
-Chrome, Brave ve Edge için dört küçük tarayıcı uzantısı. Hesap, kayıt ya da API
+Chrome, Chromium, Brave ve Edge için dört küçük tarayıcı uzantısı. Hesap, kayıt ya da API
 anahtarı istemezler. Oto Çevirmen dışındakiler ağa hiç bağlanmaz.
 
 | Uzantı | Ne yapar | Çalıştığı yer | Ağ | İndir |
@@ -56,7 +56,7 @@ Animasyon sayfada kendiliğinden oynar, üzerine tıklayınca MP4 açılır.
 | Uzantı | İzinler | Veri nereye gider |
 |---|---|---|
 | Oto Çözücü | `contextMenus`, `clipboardRead`, `storage`, `notifications` | Hiçbir yere. Tüm çözme işlemi tarayıcıda yapılır. |
-| Oto Çevirmen | `contextMenus`, `storage`, `translate.googleapis.com` | Seçilen metin çeviri için Google Translate'e gider. Başka yere gitmez. Hassas sayfalarda otomatik modu kapat. |
+| Oto Çevirmen | `contextMenus`, `storage`, `translate.googleapis.com` | Seçilen metin çeviri için Google Translate'e gider. Başka yere gitmez. |
 | Sola İtele | `storage` | Hiçbir yere. Sayfa içeriğini okumaz. |
 | Voice Tamer | Yok | Hiçbir yere. Ayarlar YouTube'un yerel deposunda durur. |
 
@@ -95,4 +95,4 @@ Katman kuralı ve yeni uzantı ekleme: [docs/mimari.md](docs/mimari.md),
 
 ## Lisans
 
-[MIT](LICENSE). Kodu dağıtırken telif satırını ve lisans metnini kopyaya ekle.
+[MIT](LICENSE)

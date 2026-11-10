@@ -9,6 +9,17 @@ const KOK = join(dirname(fileURLToPath(import.meta.url)), "..");
 let hata = 0;
 const yaz = (ad, m) => { console.log(`  ✗ ${ad}: ${m}`); hata = 1; };
 
+// macOS ve Windows dosya sistemi harf büyüklüğünü ayırmaz, Linux ayırır. Yol bu yüzden
+// her parçasıyla klasör listesinde aranır: existsSync Icon.png'yi icon.png sanardı.
+function aynenVar(kok, yol) {
+  let klasor = kok;
+  for (const parca of yol.split(/[\\/]/).filter(Boolean)) {
+    if (!existsSync(klasor) || !readdirSync(klasor).includes(parca)) return false;
+    klasor = join(klasor, parca);
+  }
+  return true;
+}
+
 // İçinde manifest.json olan her kök klasör bir uzantıdır.
 const uzantilar = readdirSync(KOK).filter((ad) => existsSync(join(KOK, ad, "manifest.json")));
 if (!uzantilar.length) { console.log("  ✗ hiç uzantı bulunamadı"); process.exit(1); }
@@ -37,7 +48,7 @@ for (const ad of uzantilar) {
 
   for (const y of yollar) {
     const temiz = y.replace(/^\//, "");
-    if (!existsSync(join(kok, temiz))) yaz(ad, "dosya yok: " + y);
+    if (!aynenVar(kok, temiz)) yaz(ad, "dosya yok (harf büyüklüğü dahil): " + y);
     else if (!/^(src|icons)\//.test(temiz)) yaz(ad, "paket dışında kalır (src/ ya da icons/ altında olmalı): " + y);
   }
   if ("key" in m) yaz(ad, "manifest'te 'key' alanı var; kişisel uzantı kimliği depoya girmemeli");

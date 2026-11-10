@@ -5,7 +5,7 @@
 
   /* Ayar şeması. Her alanın tipi ve SINIRI burada. localStorage'ı aynı origin'deki
    * başka bir script bozabilir. Sınırı olmayan bir "output" sesi kulağa zarar verecek
-   * kadar açabilirdi. Anahtar sırası paneldeki etiket numaralarıyla (v1..v16) eşleşir, değiştirme. */
+   * kadar açabilirdi. Anahtar sırası paneldeki etiket numaralarıyla (v1..v16) eşleşir. */
   const SPEC = {
     deessMax:   { min: 0,    max: 24,   def: 10   },  // dB, maks sibilans kesme
     deessFreq:  { min: 4500, max: 9500, def: 7000 },  // Hz

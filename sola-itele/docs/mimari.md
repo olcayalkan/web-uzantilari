@@ -34,7 +34,7 @@ Hesap ile uygulama ayrıdır: hangi öğenin nereye taşınacağına `domain/ite
 
 ## İçerik betiği nasıl çalışır
 
-1. **Kök daraltma:** Sayfaya `<style id="sola-itele-stil">` eklenir. `html` öğesine `width: <oran>vw`, `margin: 0` ve `position: relative` verilir. `position: relative` sayesinde konumlu atası olmayan `absolute` öğeler de daraltılmış alana göre yerleşir.
+1. **Kök daraltma:** Sayfaya `<style id="sola-itele-stil">` eklenir. `html` öğesine `width: <oran>%`, `margin: 0` ve `position: relative` verilir. `position: relative` sayesinde konumlu atası olmayan `absolute` öğeler de daraltılmış alana göre yerleşir.
 2. **Fixed öğeleri sığdırma (`fixedleriSigdir` → `IteleMotoru.fixedYerlesim`):** `position: fixed` öğeler `html` genişliğini değil pencereyi esas alır. Bu yüzden `body` içindeki her fixed öğe ölçülür ve sınırı aşan ya da ortalanmış olanlar üç türe ayrılır:
 
    | Tür | Nasıl anlaşılır | Ne yapılır |
