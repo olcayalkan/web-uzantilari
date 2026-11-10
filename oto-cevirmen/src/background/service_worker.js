@@ -1,6 +1,7 @@
 // Arka plan servisi: tüm çeviri istekleri buradan geçer (CSP/CORS'tan bağımsız),
 // sağ tık menüsü ve klavye kısayolunu sayfadaki balona yönlendirir.
-importScripts(
+// Firefox'ta arka plan bir sayfadır, importScripts yoktur; dosyaları manifest yükler.
+if (typeof importScripts === "function") importScripts(
   "../core/sabitler.js",
   "../features/ceviri/domain/ceviri_motoru.js",
   "../features/ceviri/data/depolama.js",

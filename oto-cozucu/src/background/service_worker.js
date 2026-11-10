@@ -1,5 +1,6 @@
 // Arka plan servisi: sağ tık menüsü, seçimi doğrudan çözüp bildirim gösterir, simge rozetini (AÇIK) günceller.
-importScripts(
+// Firefox'ta arka plan bir sayfadır, importScripts yoktur; dosyaları manifest yükler.
+if (typeof importScripts === "function") importScripts(
   "../features/cozucu/domain/cozucu_motoru.js",
   "../core/sabitler.js",
   "../features/cozucu/data/depolama.js"
